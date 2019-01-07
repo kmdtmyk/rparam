@@ -12,6 +12,7 @@ module Rparam
 
       def install
         migration_template 'migration.rb', 'db/migrate/create_controller_parameters.rb', migration_version: migration_version
+        template 'model.rb', 'app/models/controller_parameter.rb'
       end
 
       def self.next_migration_number(*args)
