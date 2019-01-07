@@ -2,10 +2,12 @@
 
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :edit, :update, :destroy]
+  before_action :apply_rparam, only: [:index]
 
   # GET /books
   def index
     @books = Book.all
+    p params
   end
 
   # GET /books/1
