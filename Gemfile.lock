@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rparams (0.1.0)
+    rparam (0.1.0)
       rails (~> 5.2.2)
 
 GEM
@@ -120,7 +120,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rparams!
+  rparam!
   sqlite3
 
 BUNDLED WITH

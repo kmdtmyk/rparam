@@ -1,4 +1,4 @@
 # desc "Explaining what the task does"
-# task :rparams do
+# task :rparam do
 #   # Task goes here
 # end
