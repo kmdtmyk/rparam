@@ -10,7 +10,7 @@ module Rparam
         if parameter_class.nil?
           return
         end
-        parameter = parameter_class.new(self)
+        parameter = parameter_class.new(params)
         if parameter.respond_to? action_name
           parameter.send action_name
         end

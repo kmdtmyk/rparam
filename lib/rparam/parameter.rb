@@ -3,8 +3,8 @@
 module Rparam
   class Parameter
 
-    def initialize(controller)
-      @params = controller.params
+    def initialize(params)
+      @params = params
     end
 
     private
@@ -12,9 +12,16 @@ module Rparam
       def param(name, options = nil)
         options ||= {}
         value = @params[name]
+
         if options[:type] == Date
-          @params[name] = parse_date(value)
+          value = parse_date(value)
         end
+
+        if value.nil? && options[:default].present?
+          value = options[:default]
+        end
+
+        @params[name] = value
       end
 
       def parse_date(value)
