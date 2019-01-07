@@ -1,4 +1,4 @@
-class CreateControllerParameters < ActiveRecord::Migration<%= migration_version %>
+class CreateControllerParameters < ActiveRecord::Migration[5.2]
   def change
     create_table :controller_parameters do |t|
       t.references :parent, polymorphic: true, index: true

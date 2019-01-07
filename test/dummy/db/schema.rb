@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_07_091753) do
+ActiveRecord::Schema.define(version: 2019_01_07_092249) do
 
   create_table "books", force: :cascade do |t|
     t.string "name"
@@ -18,6 +18,17 @@ ActiveRecord::Schema.define(version: 2019_01_07_091753) do
     t.date "release_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "controller_parameters", force: :cascade do |t|
+    t.string "parent_type"
+    t.integer "parent_id"
+    t.string "scope"
+    t.string "name"
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_type", "parent_id"], name: "index_controller_parameters_on_parent_type_and_parent_id"
   end
 
   create_table "users", force: :cascade do |t|
