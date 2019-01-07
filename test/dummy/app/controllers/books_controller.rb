@@ -7,7 +7,6 @@ class BooksController < ApplicationController
   # GET /books
   def index
     @books = Book.all
-    p params
   end
 
   # GET /books/1
