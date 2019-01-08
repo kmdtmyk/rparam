@@ -2,9 +2,17 @@
 
 RSpec.describe Rparam::Parameter do
 
+  class MockController
+    attr_reader :params
+    def initialize(params)
+      @params = params
+    end
+  end
+
   describe 'param' do
 
-    let(:parameter){ Rparam::Parameter.new(params) }
+    let(:parameter){ Rparam::Parameter.new(controller) }
+    let(:controller){ MockController.new(params) }
 
     describe 'inclusion' do
 
