@@ -17,6 +17,10 @@ module Rparam
         options ||= {}
         value = params[name]
 
+        if options[:save].present?
+          save(name, value)
+        end
+
         if options[:inclusion].present?
           value = nil unless value.in? options[:inclusion]
         end
@@ -36,6 +40,19 @@ module Rparam
         Date.parse(value)
       rescue
         nil
+      end
+
+      def save(name, value)
+        parent = @controller.current_user
+        controller_parameter = parent.controller_parameters.find_or_create_by(
+          scope: scope,
+          name: name,
+        )
+        controller_parameter.update(value: value)
+      end
+
+      def scope
+        "#{@controller.controller_name}##{@controller.action_name}"
       end
 
   end
