@@ -4,70 +4,67 @@ RSpec.describe Rparam::Parameter do
 
   describe 'param' do
 
+    let(:parameter){ Rparam::Parameter.new(params) }
+
     describe 'type: Date' do
 
-      it 'delimited by -' do
-        params = ActionController::Parameters.new(date: '2018-01-01')
-        parameter = Rparam::Parameter.new(params)
-        parameter.send(:param, :date, type: Date)
-        expect(params[:date]).to eq Date.new(2018, 1, 1)
+      let(:params){ ActionController::Parameters.new(date: date) }
+      let(:options){ { type: Date } }
+
+      subject do
+        parameter.send(:param, :date, **options)
+        params[:date]
       end
 
-      it 'delimited by /' do
-        params = ActionController::Parameters.new(date: '2018/02/02')
-        parameter = Rparam::Parameter.new(params)
-        parameter.send(:param, :date, type: Date)
-        expect(params[:date]).to eq Date.new(2018, 2, 2)
+      context 'delimited by -' do
+        let(:date){ '2018-01-01' }
+        it{ expect(subject).to eq Date.new(2018, 1, 1) }
       end
 
-      it 'invalid date' do
-        params = ActionController::Parameters.new(date: 'invalid')
-        parameter = Rparam::Parameter.new(params)
-        parameter.send(:param, :date, type: Date)
-        expect(params[:date]).to eq nil
+      context 'delimited by /' do
+        let(:date){ '2018/02/02' }
+        it{ expect(subject).to eq Date.new(2018, 2, 2) }
       end
 
-      it 'nil' do
-        params = ActionController::Parameters.new(date: nil)
-        parameter = Rparam::Parameter.new(params)
-        parameter.send(:param, :date, type: Date)
-        expect(params[:date]).to eq nil
+      context 'invalid date' do
+        let(:date){ 'invalid' }
+        it{ expect(subject).to eq nil }
+      end
+
+      context 'nil' do
+        let(:date){ nil }
+        it{ expect(subject).to eq nil }
       end
 
       describe 'with default value' do
 
-        it 'valid date' do
-          params = ActionController::Parameters.new(date: '2018-03-03')
-          parameter = Rparam::Parameter.new(params)
-          default = Date.today
-          parameter.send(:param, :date, type: Date, default: default)
-          expect(params[:date]).to eq Date.new(2018, 3, 3)
+        let(:default){ Date.today }
+        let(:options){ { type: Date, default: default } }
+
+        context 'valid date' do
+          let(:date){ '2018-03-03' }
+          it{ expect(subject).to eq Date.new(2018, 3, 3) }
         end
 
-        it 'invalid date' do
-          params = ActionController::Parameters.new(date: 'invalid')
-          parameter = Rparam::Parameter.new(params)
-          default = Date.today
-          parameter.send(:param, :date, type: Date, default: default)
-          expect(params[:date]).to eq default
+        context 'invalid date' do
+          let(:date){ 'invalid' }
+          it{ expect(subject).to eq default }
         end
 
       end
 
       describe 'without default value' do
 
-        it 'valid date' do
-          params = ActionController::Parameters.new(date: '2018-04-04')
-          parameter = Rparam::Parameter.new(params)
-          parameter.send(:param, :date, type: Date)
-          expect(params[:date]).to eq Date.new(2018, 4, 4)
+        let(:options){ { type: Date } }
+
+        context 'valid date' do
+          let(:date){ '2018-04-04' }
+          it{ expect(subject).to eq Date.new(2018, 4, 4) }
         end
 
-        it 'invalid date' do
-          params = ActionController::Parameters.new(date: 'invalid')
-          parameter = Rparam::Parameter.new(params)
-          parameter.send(:param, :date, type: Date)
-          expect(params[:date]).to eq nil
+        context 'invalid date' do
+          let(:date){ 'invalid' }
+          it{ expect(subject).to eq nil }
         end
 
       end
