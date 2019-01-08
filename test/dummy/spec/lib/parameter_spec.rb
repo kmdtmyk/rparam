@@ -6,6 +6,45 @@ RSpec.describe Rparam::Parameter do
 
     let(:parameter){ Rparam::Parameter.new(params) }
 
+    describe 'inclusion' do
+
+      let(:params){ ActionController::Parameters.new(order: order) }
+      let(:options){ { inclusion: %w(asc desc) } }
+
+      subject do
+        parameter.send(:param, :order, **options)
+        params[:order]
+      end
+
+      context 'included value' do
+        let(:order){ 'asc' }
+        it{ expect(subject).to eq 'asc' }
+      end
+
+      context 'not included value' do
+        let(:order){ 'foo' }
+        it{ expect(subject).to eq nil }
+      end
+
+      describe 'with default value' do
+
+        let(:default){ 'asc' }
+        let(:options){ { inclusion: %w(asc desc), default: default } }
+
+        context 'included value' do
+          let(:order){ 'desc' }
+          it{ expect(subject).to eq 'desc' }
+        end
+
+        context 'not included value' do
+          let(:order){ 'foo' }
+          it{ expect(subject).to eq 'asc' }
+        end
+
+      end
+
+    end
+
     describe 'type: Date' do
 
       let(:params){ ActionController::Parameters.new(date: date) }
@@ -49,22 +88,6 @@ RSpec.describe Rparam::Parameter do
         context 'invalid date' do
           let(:date){ 'invalid' }
           it{ expect(subject).to eq default }
-        end
-
-      end
-
-      describe 'without default value' do
-
-        let(:options){ { type: Date } }
-
-        context 'valid date' do
-          let(:date){ '2018-04-04' }
-          it{ expect(subject).to eq Date.new(2018, 4, 4) }
-        end
-
-        context 'invalid date' do
-          let(:date){ 'invalid' }
-          it{ expect(subject).to eq nil }
         end
 
       end

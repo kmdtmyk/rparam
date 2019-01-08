@@ -13,6 +13,10 @@ module Rparam
         options ||= {}
         value = @params[name]
 
+        if options[:inclusion].present?
+          value = nil unless value.in? options[:inclusion]
+        end
+
         if options[:type] == Date
           value = parse_date(value)
         end
