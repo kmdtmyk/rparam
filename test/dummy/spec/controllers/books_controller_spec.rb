@@ -27,8 +27,22 @@ RSpec.describe BooksController, type: :controller do
 
     subject{ get :index, params: { sort: 'asc' } }
 
-    it 'save' do
-      expect{ subject }.to change{ ControllerParameter.count }.by 1
+    context 'first time' do
+      it{ expect{ subject }.to change{ ControllerParameter.count }.by 1 }
+    end
+
+    context 'next time' do
+      before{ subject }
+      it{ expect{ subject }.to change{ ControllerParameter.count }.by 0 }
+    end
+
+    context 'next time without param' do
+      subject do
+        get :index, params: { sort: 'asc' }
+        get :index
+        @controller.params[:sort]
+      end
+      it{ expect(subject).to eq 'asc' }
     end
 
   end

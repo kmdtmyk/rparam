@@ -17,8 +17,15 @@ module Rparam
         options ||= {}
         value = params[name]
 
-        if options[:save].present?
-          save(name, value)
+        if options[:save] == true
+          if value.nil?
+            controller_parameter = load(name)
+            unless controller_parameter.nil?
+              value = controller_parameter.value
+            end
+          else
+            save(name, value)
+          end
         end
 
         if options[:inclusion].present?
@@ -49,6 +56,14 @@ module Rparam
           name: name,
         )
         controller_parameter.update(value: value)
+      end
+
+      def load(name)
+        user = @controller.current_user
+        user.controller_parameters.find_by(
+          scope: scope,
+          name: name,
+        )
       end
 
       def scope
