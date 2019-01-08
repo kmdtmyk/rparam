@@ -3,4 +3,6 @@ Rails.application.routes.draw do
 
   resources :books
 
+  match '/examples', to: ExamplesController, via: :get
+
 end
