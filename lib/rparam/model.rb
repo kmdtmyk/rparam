@@ -8,8 +8,8 @@ module Rparam
     # end
 
     class_methods do
-      def acts_as_rparam_parent
-        has_many :controller_parameters, as: :parent
+      def acts_as_rparam_user
+        has_many :controller_parameters, as: :user
       end
     end
 

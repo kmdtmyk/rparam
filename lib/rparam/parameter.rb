@@ -43,8 +43,8 @@ module Rparam
       end
 
       def save(name, value)
-        parent = @controller.current_user
-        controller_parameter = parent.controller_parameters.find_or_create_by(
+        user = @controller.current_user
+        controller_parameter = user.controller_parameters.find_or_create_by(
           scope: scope,
           name: name,
         )
