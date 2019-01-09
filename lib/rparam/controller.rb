@@ -10,9 +10,13 @@ module Rparam
         if parameter_class.nil?
           return
         end
-        parameter = parameter_class.new(self)
+        parameter = parameter_class.new
         if parameter.respond_to? action_name
           parameter.send action_name
+        end
+
+        parameter.config.each do |name, options|
+          apply_each_rparam(name, options)
         end
       end
 

@@ -3,12 +3,17 @@
 module Rparam
   class Parameter
 
-    def initialize(controller)
-      @controller = controller
+    attr_reader :config
+
+    def initialize
+      @config = Hash.new({})
     end
 
     def param(name, options = nil)
-      @controller.apply_each_rparam(name, options)
+      if options.nil?
+        return
+      end
+      @config[name] = @config[name].merge options
     end
 
   end
