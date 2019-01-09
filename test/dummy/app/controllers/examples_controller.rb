@@ -4,10 +4,16 @@ class ExamplesController < ApplicationController
   before_action :apply_rparam
   before_action :render_nothing
 
-  def index1
+  def index_inclusion
   end
 
-  def index2
+  def index_inclusion_default
+  end
+
+  def index_date
+  end
+
+  def index_save
   end
 
   private

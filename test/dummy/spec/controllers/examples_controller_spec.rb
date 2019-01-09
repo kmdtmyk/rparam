@@ -7,9 +7,42 @@ RSpec.describe ExamplesController, type: :controller do
   let!(:user){ User.create }
   before{ allow(@controller).to receive(:current_user).and_return(user) }
 
+  describe 'inclusion' do
+
+    let(:action){ :index_inclusion }
+    subject{ @controller.params[:order] }
+
+    it 'included value' do
+      get action, params: { order: 'asc' }
+      expect(subject).to eq 'asc'
+    end
+
+    it 'not included value' do
+      get action, params: { order: 'foo' }
+      expect(subject).to eq nil
+    end
+
+    describe 'with default value' do
+
+      let(:action){ :index_inclusion_default }
+
+      it 'included value' do
+        get action, params: { order: 'asc' }
+        expect(subject).to eq 'asc'
+      end
+
+      it 'not included value' do
+        get action, params: { order: 'foo' }
+        expect(subject).to eq 'asc'
+      end
+
+    end
+
+  end
+
   describe 'type: Date' do
 
-    let(:action){ :index1 }
+    let(:action){ :index_date }
     subject{ @controller.params[:date] }
 
     it 'valid date' do
@@ -26,7 +59,7 @@ RSpec.describe ExamplesController, type: :controller do
 
   describe 'save' do
 
-    let(:action){ :index2 }
+    let(:action){ :index_save }
     subject{ get action, params: { sort: 'asc' } }
 
     context 'first time' do
