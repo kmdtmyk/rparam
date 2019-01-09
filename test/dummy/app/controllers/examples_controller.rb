@@ -4,6 +4,9 @@ class ExamplesController < ApplicationController
   before_action :apply_rparam
   before_action :render_nothing
 
+  def index
+  end
+
   def index_inclusion
   end
 

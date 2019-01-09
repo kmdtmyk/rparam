@@ -11,10 +11,9 @@ module Rparam
           return
         end
         parameter = parameter_class.new
-        if parameter.respond_to? action_name
+        if parameter.respond_to? action_name and parameter.method(action_name).owner == parameter_class
           parameter.send action_name
         end
-
         parameter.each do |name, options|
           apply_each_rparam(name, options)
         end

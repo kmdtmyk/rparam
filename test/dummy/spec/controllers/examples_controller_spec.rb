@@ -7,6 +7,10 @@ RSpec.describe ExamplesController, type: :controller do
   let!(:user){ User.create }
   before{ allow(@controller).to receive(:current_user).and_return(user) }
 
+  it do
+    expect{ get :index }.not_to raise_error
+  end
+
   describe 'inclusion' do
 
     let(:action){ :index_inclusion }
