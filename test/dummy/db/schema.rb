@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 2019_01_07_092249) do
   create_table "controller_parameters", force: :cascade do |t|
     t.string "user_type"
     t.integer "user_id"
-    t.string "scope"
+    t.string "action"
     t.string "name"
     t.string "value"
     t.datetime "created_at", null: false

@@ -52,7 +52,7 @@ module Rparam
       def save(name, value)
         user = @controller.current_user
         controller_parameter = user.controller_parameters.find_or_create_by(
-          scope: scope,
+          action: full_action_name,
           name: name,
         )
         controller_parameter.update(value: value)
@@ -61,12 +61,12 @@ module Rparam
       def load(name)
         user = @controller.current_user
         user.controller_parameters.find_by(
-          scope: scope,
+          action: full_action_name,
           name: name,
         )
       end
 
-      def scope
+      def full_action_name
         "#{@controller.controller_name}##{@controller.action_name}"
       end
 
