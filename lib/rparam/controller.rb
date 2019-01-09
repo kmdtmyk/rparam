@@ -51,7 +51,7 @@ module Rparam
       end
 
       def save_parameter(name, value)
-        user = current_user
+        user = current_rparam_user
         controller_parameter = user.controller_parameters.find_or_create_by(
           action: full_action_name,
           name: name,
@@ -60,11 +60,15 @@ module Rparam
       end
 
       def load_parameter(name)
-        user = current_user
+        user = current_rparam_user
         user.controller_parameters.find_by(
           action: full_action_name,
           name: name,
         )
+      end
+
+      def current_rparam_user
+        current_user
       end
 
       def full_action_name
