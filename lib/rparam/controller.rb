@@ -24,11 +24,11 @@ module Rparam
         options ||= {}
         value = params[name]
 
-        if options[:save] == true
+        if options[:save].present?
           if value.nil?
-            value = load_parameter(name)
+            value = load_parameter(name, options)
           else
-            save_parameter(name, value)
+            save_parameter(name, value, options)
           end
         end
 
@@ -40,23 +40,27 @@ module Rparam
           value = Parser::parse(value, options[:type])
         end
 
-        if value.nil? && options[:default].present?
+        if value.nil? and options[:default].present?
           value = options[:default]
         end
 
         params[name] = value
       end
 
-      def save_parameter(name, value)
+      def save_parameter(name, value, options)
         user = current_rparam_user
         controller_parameter = user.controller_parameters.find_or_create_by(
           action: full_action_name,
           name: name,
         )
+        if options[:save].is_a? Hash and options[:save][:relative_by].present?
+          value = Parser::parse(value, options[:type]) - options[:save][:relative_by]
+          value = value.to_i
+        end
         controller_parameter.update(value: value)
       end
 
-      def load_parameter(name)
+      def load_parameter(name, options)
         user = current_rparam_user
         controller_parameter = user.controller_parameters.find_by(
           action: full_action_name,
@@ -65,7 +69,11 @@ module Rparam
         if controller_parameter.nil?
           return nil
         end
-        controller_parameter.value
+        value = controller_parameter.value
+        if options[:save].is_a? Hash and options[:save][:relative_by].present?
+          value = options[:save][:relative_by] + value.to_i
+        end
+        value
       end
 
       def current_rparam_user

@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe TestsController, type: :controller do
+  include ActiveSupport::Testing::TimeHelpers
 
   let!(:user){ User.create }
   before{ allow(@controller).to receive(:current_user).and_return(user) }
@@ -49,11 +50,33 @@ RSpec.describe TestsController, type: :controller do
         expect(@controller.params[:date]).to eq nil
       end
 
+      describe 'save: relative_by' do
+
+        example do
+          travel_to Date.new(2018, 10, 15)
+          get :index, params: { date: '2018-10-20' }
+          @controller.apply_each_rparam :date, type: Date, save: { relative_by: Date.today }
+          expect(@controller.params[:date]).to eq Date.new(2018, 10, 20)
+          expect(ControllerParameter.count).to eq 1
+          expect(ControllerParameter.first.value).to eq '5'
+
+          get :index
+          @controller.apply_each_rparam :date, type: Date, save: { relative_by: Date.today }
+          expect(@controller.params[:date]).to eq Date.new(2018, 10, 20)
+
+          travel 5.days
+          get :index
+          @controller.apply_each_rparam :date, type: Date, save: { relative_by: Date.today }
+          expect(@controller.params[:date]).to eq Date.new(2018, 10, 25)
+        end
+
+      end
+
     end
 
-    describe 'save: true' do
+    describe 'save' do
 
-      example do
+      example 'true' do
         get :index, params: { order: 'asc' }
         @controller.apply_each_rparam :order, save: true
         expect(@controller.params[:order]).to eq 'asc'
@@ -63,6 +86,18 @@ RSpec.describe TestsController, type: :controller do
         @controller.apply_each_rparam :order, save: true
         expect(@controller.params[:order]).to eq 'asc'
         expect(ControllerParameter.count).to eq 1
+      end
+
+      example 'false' do
+        get :index, params: { order: 'asc' }
+        @controller.apply_each_rparam :order, save: false
+        expect(@controller.params[:order]).to eq 'asc'
+        expect(ControllerParameter.count).to eq 0
+
+        get :index
+        @controller.apply_each_rparam :order, save: false
+        expect(@controller.params[:order]).to eq nil
+        expect(ControllerParameter.count).to eq 0
       end
 
     end

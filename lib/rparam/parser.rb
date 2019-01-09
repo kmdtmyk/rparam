@@ -13,6 +13,9 @@ module Rparam
       end
 
       def parse_date(value)
+        if value.is_a? Date
+          return value
+        end
         Date.parse(value)
       rescue
         nil
