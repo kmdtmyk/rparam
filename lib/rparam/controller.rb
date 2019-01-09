@@ -48,28 +48,36 @@ module Rparam
       end
 
       def save_parameter(name, value, options)
-        user = current_rparam_user
-        controller_parameter = user.controller_parameters.find_or_create_by(
-          action: full_action_name,
-          name: name,
-        )
         if options[:save].is_a? Hash and options[:save][:relative_by].present?
           value = Parser::parse(value, options[:type]) - options[:save][:relative_by]
           value = value.to_i
         end
-        controller_parameter.update(value: value)
+        user = current_rparam_user
+        if user.nil?
+          cookies["#{full_action_name},#{name}"] = value
+        else
+          controller_parameter = user.controller_parameters.find_or_create_by(
+            action: full_action_name,
+            name: name,
+          )
+          controller_parameter.update(value: value)
+        end
       end
 
       def load_parameter(name, options)
         user = current_rparam_user
-        controller_parameter = user.controller_parameters.find_by(
-          action: full_action_name,
-          name: name,
-        )
-        if controller_parameter.nil?
-          return nil
+        if user.nil?
+          value = cookies["#{full_action_name},#{name}"]
+        else
+          controller_parameter = user.controller_parameters.find_by(
+            action: full_action_name,
+            name: name,
+          )
+          if controller_parameter.nil?
+            return nil
+          end
+          value = controller_parameter.value
         end
-        value = controller_parameter.value
         if options[:save].is_a? Hash and options[:save][:relative_by].present?
           value = options[:save][:relative_by] + value.to_i
         end

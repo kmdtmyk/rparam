@@ -49,6 +49,34 @@ RSpec.describe TestsController, type: :controller do
 
     end
 
+    describe 'save' do
+
+      example 'true' do
+        get :index, params: { order: 'asc' }
+        @controller.apply_each_rparam :order, save: true
+        expect(@controller.params[:order]).to eq 'asc'
+        expect(ControllerParameter.count).to eq 0
+
+        get :index
+        @controller.apply_each_rparam :order, save: true
+        expect(@controller.params[:order]).to eq 'asc'
+        expect(ControllerParameter.count).to eq 0
+      end
+
+      example 'false' do
+        get :index, params: { order: 'asc' }
+        @controller.apply_each_rparam :order, save: false
+        expect(@controller.params[:order]).to eq 'asc'
+        expect(ControllerParameter.count).to eq 0
+
+        get :index
+        @controller.apply_each_rparam :order, save: false
+        expect(@controller.params[:order]).to eq nil
+        expect(ControllerParameter.count).to eq 0
+      end
+
+    end
+
     describe 'login user' do
 
       let!(:user){ User.create }
