@@ -11,7 +11,7 @@ module Rparam
       if name.nil? or options.nil?
         return
       end
-      self[name] = self[name].merge! options
+      self[name] = self[name].merge options
     end
 
   end
