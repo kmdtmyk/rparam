@@ -16,5 +16,11 @@ module Rparam
       @config[name] = @config[name].merge options
     end
 
+    def each
+      @config.each do |name, options|
+        yield name, options
+      end
+    end
+
   end
 end

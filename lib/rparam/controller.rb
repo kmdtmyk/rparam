@@ -15,7 +15,7 @@ module Rparam
           parameter.send action_name
         end
 
-        parameter.config.each do |name, options|
+        parameter.each do |name, options|
           apply_each_rparam(name, options)
         end
       end
