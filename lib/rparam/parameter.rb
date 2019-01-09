@@ -1,17 +1,27 @@
 # frozen_string_literal: true
 
 module Rparam
-  class Parameter < Hash
+  class Parameter
 
     def initialize
-      super({})
+      @config = Hash.new({})
     end
 
     def param(name, options = nil)
       if name.nil? or options.nil?
         return
       end
-      self[name] = self[name].merge options
+      @config[name] = @config[name].merge options
+    end
+
+    def to_h
+      @config.dup
+    end
+
+    def each
+      @config.each do |name, options|
+        yield name, options
+      end
     end
 
   end
