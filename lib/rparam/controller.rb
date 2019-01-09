@@ -26,10 +26,7 @@ module Rparam
 
         if options[:save] == true
           if value.nil?
-            controller_parameter = load_parameter(name)
-            unless controller_parameter.nil?
-              value = controller_parameter.value
-            end
+            value = load_parameter(name)
           else
             save_parameter(name, value)
           end
@@ -61,10 +58,14 @@ module Rparam
 
       def load_parameter(name)
         user = current_rparam_user
-        user.controller_parameters.find_by(
+        controller_parameter = user.controller_parameters.find_by(
           action: full_action_name,
           name: name,
         )
+        if controller_parameter.nil?
+          return nil
+        end
+        controller_parameter.value
       end
 
       def current_rparam_user
