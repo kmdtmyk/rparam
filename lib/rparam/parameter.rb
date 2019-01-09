@@ -1,25 +1,17 @@
 # frozen_string_literal: true
 
 module Rparam
-  class Parameter
-
-    attr_reader :config
+  class Parameter < Hash
 
     def initialize
-      @config = Hash.new({})
+      super({})
     end
 
     def param(name, options = nil)
       if options.nil?
         return
       end
-      @config[name] = @config[name].merge options
-    end
-
-    def each
-      @config.each do |name, options|
-        yield name, options
-      end
+      self[name] = self[name].merge! options
     end
 
   end

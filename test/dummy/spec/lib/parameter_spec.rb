@@ -4,10 +4,12 @@ require 'rails_helper'
 
 RSpec.describe Rparam::Parameter do
 
-  describe 'config' do
+  it{ expect(Rparam::Parameter.superclass).to eq Hash }
+
+  describe 'param' do
 
     let(:parameter){ Rparam::Parameter.new }
-    subject{ parameter.config }
+    subject{ parameter }
 
     it do
       parameter.param :date, type: Date
