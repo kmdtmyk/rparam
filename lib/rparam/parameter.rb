@@ -8,7 +8,7 @@ module Rparam
     end
 
     def param(name, options = nil)
-      if options.nil?
+      if name.nil? or options.nil?
         return
       end
       self[name] = self[name].merge! options

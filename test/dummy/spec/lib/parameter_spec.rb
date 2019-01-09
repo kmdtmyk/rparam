@@ -28,6 +28,11 @@ RSpec.describe Rparam::Parameter do
       expect(subject).to eq({ order: { inclusion: %w(asc desc), default: 'asc' } })
     end
 
+    it do
+      parameter.param nil, default: 'value'
+      expect(subject).to eq({})
+    end
+
   end
 
 end
