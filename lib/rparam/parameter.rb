@@ -32,8 +32,8 @@ module Rparam
           value = nil unless value.in? options[:inclusion]
         end
 
-        if options[:type] == Date
-          value = parse_date(value)
+        if options[:type].present?
+          value = Parser::parse(value, options[:type])
         end
 
         if value.nil? && options[:default].present?
@@ -41,12 +41,6 @@ module Rparam
         end
 
         params[name] = value
-      end
-
-      def parse_date(value)
-        Date.parse(value)
-      rescue
-        nil
       end
 
       def save(name, value)

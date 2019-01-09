@@ -4,6 +4,7 @@ require 'rparam/railtie'
 require 'rparam/controller'
 require 'rparam/model'
 require 'rparam/parameter'
+require 'rparam/parser'
 
 module Rparam
   # Your code goes here...
