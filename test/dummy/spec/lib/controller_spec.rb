@@ -130,6 +130,21 @@ RSpec.describe TestsController, type: :controller do
           expect(@controller.params[:date]).to eq Date.new(2018, 10, 25)
         end
 
+        example 'blank' do
+          get :index, params: { date: '' }
+          @controller.apply_each_rparam :date, type: Date, save: { relative_by: Date.today }
+          expect(@controller.params[:date]).to eq nil
+          expect(ControllerParameter.count).to eq 1
+          expect(ControllerParameter.first.value).to eq ''
+        end
+
+        example 'without params' do
+          get :index
+          @controller.apply_each_rparam :date, type: Date, save: { relative_by: Date.today }
+          expect(@controller.params[:date]).to eq nil
+          expect(ControllerParameter.count).to eq 0
+        end
+
       end
 
     end

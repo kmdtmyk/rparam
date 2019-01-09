@@ -48,8 +48,10 @@ module Rparam
 
       def save_parameter(name, value, options)
         if options[:save].is_a? Hash and options[:save][:relative_by].present?
-          value = Parser::parse(value, options[:type]) - options[:save][:relative_by]
-          value = value.to_i
+          parsed_value = Parser::parse(value, options[:type])
+          unless parsed_value.nil?
+            value = (parsed_value - options[:save][:relative_by]).to_i
+          end
         end
         user = current_rparam_user
         if user.nil?
@@ -78,7 +80,7 @@ module Rparam
           value = controller_parameter.value
         end
         if options[:save].is_a? Hash and options[:save][:relative_by].present?
-          value = options[:save][:relative_by] + value.to_i
+          value = options[:save][:relative_by] + value.to_i if value.present?
         end
         value
       end
