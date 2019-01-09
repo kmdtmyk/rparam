@@ -1,0 +1,11 @@
+<form>
+  <div>
+    <label>date</label>
+    <input type='date' name='from_date' value='<%= params[:from_date] %>'>
+    <span> 〜 <span>
+    <input type='date' name='to_date' value='<%= params[:to_date] %>'>
+  </div>
+  <button type='submit'>submit</button>
+</form>
+
+<%= debug params %>
