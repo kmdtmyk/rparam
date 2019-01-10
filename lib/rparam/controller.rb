@@ -39,6 +39,14 @@ module Rparam
           end
         end
 
+        if options[:exclusion].present?
+          if value.is_a? Array
+            value = value - options[:exclusion]
+          else
+            value = nil if value.in? options[:exclusion]
+          end
+        end
+
         if options[:type].present?
           value = Parser::parse(value, options[:type])
         end

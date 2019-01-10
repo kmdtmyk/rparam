@@ -35,6 +35,20 @@ RSpec.describe TestsController, type: :controller do
 
     end
 
+    describe 'exclusion' do
+
+      example do
+        get :index, params: { value: 'a' }
+        @controller.apply_each_rparam :value, exclusion: %w(a b c)
+        expect(@controller.params[:value]).to eq nil
+
+        get :index, params: { value: 'd' }
+        @controller.apply_each_rparam :value, exclusion: %w(a b c)
+        expect(@controller.params[:value]).to eq 'd'
+      end
+
+    end
+
     describe 'type: Date' do
 
       example 'date' do
@@ -91,6 +105,16 @@ RSpec.describe TestsController, type: :controller do
         get :index, params: { value: %w(a b c) }
         @controller.apply_each_rparam :value, type: Array, inclusion: %w(b c d)
         expect(@controller.params[:value]).to eq ['b', 'c']
+      end
+
+      example 'with exclusion' do
+        get :index, params: { value: %w(a b c) }
+        @controller.apply_each_rparam :value, type: Array, exclusion: %w(b c d)
+        expect(@controller.params[:value]).to eq ['a']
+
+        get :index, params: { value: [nil, 1] }
+        @controller.apply_each_rparam :value, type: Array, exclusion: ['']
+        expect(@controller.params[:value]).to eq ['1']
       end
 
     end
