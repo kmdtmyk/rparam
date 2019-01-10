@@ -55,7 +55,7 @@ module Rparam
         end
         user = current_rparam_user
         if user.nil?
-          cookies["#{full_action_name},#{name}"] = value
+          save_parameter_to_cookie(name, value)
         else
           controller_parameter = user.controller_parameters.find_or_create_by(
             action: full_action_name,
@@ -65,10 +65,19 @@ module Rparam
         end
       end
 
+      def save_parameter_to_cookie(name, value)
+        hash = rparam_cookie
+        hash[name] = value
+        cookies.permanent['parameter'] = {
+          value: hash.to_json,
+          path: request.path,
+        }
+      end
+
       def load_parameter(name, options)
         user = current_rparam_user
         if user.nil?
-          value = cookies["#{full_action_name},#{name}"]
+          value = rparam_cookie[name]
         else
           controller_parameter = user.controller_parameters.find_by(
             action: full_action_name,
@@ -84,6 +93,13 @@ module Rparam
           value = date.strftime '%F'
         end
         value
+      end
+
+      def rparam_cookie
+        cookie = cookies.permanent['parameter']
+        JSON.parse(cookie, symbolize_names: true)
+      rescue
+        {}
       end
 
       def current_rparam_user
