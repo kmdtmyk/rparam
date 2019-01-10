@@ -129,6 +129,12 @@ RSpec.describe TestsController, type: :controller do
         expect(@controller.params[:value]).to eq ['1']
       end
 
+      example 'with default value' do
+        get :index
+        @controller.apply_each_rparam :value, type: Array, default: %w(a b c)
+        expect(@controller.params[:value]).to eq %w(a b c)
+      end
+
     end
 
     describe 'save' do

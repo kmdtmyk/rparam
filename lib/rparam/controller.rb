@@ -57,6 +57,10 @@ module Rparam
           value = options[:default]
         end
 
+        if value.nil? and options[:type] == Array
+          value = []
+        end
+
         params[name] = value
       end
 

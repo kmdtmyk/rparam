@@ -35,9 +35,13 @@ module Rparam
         if value.is_a? Array
           return value
         end
-        JSON.parse(value)
+        parsed_value = JSON.parse(value)
+
+        if parsed_value.is_a? Array
+          parsed_value
+        end
       rescue
-        return []
+        return nil
       end
 
       def parse_int(value)
