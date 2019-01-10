@@ -71,6 +71,7 @@ module Rparam
         cookies.permanent['parameter'] = {
           value: hash.to_json,
           path: request.path,
+          httponly: true,
         }
       end
 
