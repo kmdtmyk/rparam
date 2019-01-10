@@ -49,12 +49,12 @@ module Rparam
           end
         end
 
-        if options[:type].present?
-          value = Parser::parse(value, options[:type])
-        end
-
         if value.nil? and options[:default].present?
           value = options[:default]
+        end
+
+        if options[:type].present?
+          value = Parser::parse(value, options[:type])
         end
 
         if value.nil? and options[:type] == Array
