@@ -47,10 +47,10 @@ module Rparam
       end
 
       def save_parameter(name, value, options)
-        if options[:save].is_a? Hash and options[:save][:relative_by].present?
-          parsed_value = Parser::parse(value, options[:type])
-          unless parsed_value.nil?
-            value = (parsed_value - options[:save][:relative_by]).to_i
+        if options[:save] == :relative_date
+          date = Parser::parse_date(value)
+          unless date.nil?
+            value = (date - Time.zone.today).to_i
           end
         end
         user = current_rparam_user
@@ -79,8 +79,9 @@ module Rparam
           end
           value = controller_parameter.value
         end
-        if options[:save].is_a? Hash and options[:save][:relative_by].present?
-          value = options[:save][:relative_by] + value.to_i if value.present?
+        if options[:save] == :relative_date
+          date = Time.zone.today + value.to_i if value.present?
+          value = date.strftime '%F'
         end
         value
       end

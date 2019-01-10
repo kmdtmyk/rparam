@@ -133,32 +133,32 @@ RSpec.describe TestsController, type: :controller do
         example do
           travel_to Date.new(2018, 10, 15)
           get :index, params: { date: '2018-10-20' }
-          @controller.apply_each_rparam :date, type: Date, save: { relative_by: Date.today }
-          expect(@controller.params[:date]).to eq Date.new(2018, 10, 20)
+          @controller.apply_each_rparam :date, save: :relative_date
+          expect(@controller.params[:date]).to eq '2018-10-20'
           expect(ControllerParameter.count).to eq 1
           expect(ControllerParameter.first.value).to eq '5'
 
           get :index
-          @controller.apply_each_rparam :date, type: Date, save: { relative_by: Date.today }
-          expect(@controller.params[:date]).to eq Date.new(2018, 10, 20)
+          @controller.apply_each_rparam :date, save: :relative_date
+          expect(@controller.params[:date]).to eq '2018-10-20'
 
           travel 5.days
           get :index
-          @controller.apply_each_rparam :date, type: Date, save: { relative_by: Date.today }
-          expect(@controller.params[:date]).to eq Date.new(2018, 10, 25)
+          @controller.apply_each_rparam :date, save: :relative_date
+          expect(@controller.params[:date]).to eq '2018-10-25'
         end
 
         example 'blank' do
           get :index, params: { date: '' }
-          @controller.apply_each_rparam :date, type: Date, save: { relative_by: Date.today }
-          expect(@controller.params[:date]).to eq nil
+          @controller.apply_each_rparam :date, save: :relative_date
+          expect(@controller.params[:date]).to eq ''
           expect(ControllerParameter.count).to eq 1
           expect(ControllerParameter.first.value).to eq ''
         end
 
         example 'without params' do
           get :index
-          @controller.apply_each_rparam :date, type: Date, save: { relative_by: Date.today }
+          @controller.apply_each_rparam :date, save: :relative_date
           expect(@controller.params[:date]).to eq nil
           expect(ControllerParameter.count).to eq 0
         end
