@@ -37,11 +37,29 @@ RSpec.describe TestsController, type: :controller do
 
     describe 'type: Date' do
 
-      example do
-        get :index, params: { date: '2018-12-15' }
+      example 'date' do
+        get :index, params: { date: '2018-05-15' }
         @controller.apply_each_rparam :date, type: Date
-        expect(@controller.params[:date]).to eq Date.new(2018, 12, 15)
+        expect(@controller.params[:date]).to eq Date.new(2018, 5, 15)
+      end
 
+      example 'month' do
+        get :index, params: { date: '2018-05' }
+        @controller.apply_each_rparam :date, type: Date
+        expect(@controller.params[:date]).to eq Date.new(2018, 5, 1)
+
+        get :index, params: { date: '2018-5' }
+        @controller.apply_each_rparam :date, type: Date
+        expect(@controller.params[:date]).to eq Date.new(2018, 5, 1)
+      end
+
+      example 'year' do
+        get :index, params: { date: '2018' }
+        @controller.apply_each_rparam :date, type: Date
+        expect(@controller.params[:date]).to eq Date.new(2018, 1, 1)
+      end
+
+      example 'invalid date' do
         get :index, params: { date: 'invalid' }
         @controller.apply_each_rparam :date, type: Date
         expect(@controller.params[:date]).to eq nil
