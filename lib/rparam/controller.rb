@@ -40,7 +40,7 @@ module Rparam
           end
         end
 
-        if options[:exclusion].present?
+        if options.has_key? :exclusion
           exclusion = Array.wrap options[:exclusion]
           if value.is_a? Array
             value = value - exclusion

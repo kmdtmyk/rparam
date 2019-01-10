@@ -123,6 +123,10 @@ RSpec.describe TestsController, type: :controller do
         get :index, params: { value: %w(a b c) }
         @controller.apply_each_rparam :value, type: Array, exclusion: %w(b c d)
         expect(@controller.params[:value]).to eq %w(a)
+
+        get :index, params: { value: [nil, 1] }
+        @controller.apply_each_rparam :value, type: Array, exclusion: ''
+        expect(@controller.params[:value]).to eq ['1']
       end
 
     end
