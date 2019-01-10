@@ -39,6 +39,10 @@ RSpec.describe TestsController, type: :controller do
 
       example do
         get :index, params: { value: 'a' }
+        @controller.apply_each_rparam :value, exclusion: 'a'
+        expect(@controller.params[:value]).to eq nil
+
+        get :index, params: { value: 'a' }
         @controller.apply_each_rparam :value, exclusion: %w(a b c)
         expect(@controller.params[:value]).to eq nil
 
@@ -103,18 +107,22 @@ RSpec.describe TestsController, type: :controller do
 
       example 'with inclusion' do
         get :index, params: { value: %w(a b c) }
+        @controller.apply_each_rparam :value, type: Array, inclusion: 'a'
+        expect(@controller.params[:value]).to eq %w(a)
+
+        get :index, params: { value: %w(a b c) }
         @controller.apply_each_rparam :value, type: Array, inclusion: %w(b c d)
-        expect(@controller.params[:value]).to eq ['b', 'c']
+        expect(@controller.params[:value]).to eq %w(b c)
       end
 
       example 'with exclusion' do
         get :index, params: { value: %w(a b c) }
-        @controller.apply_each_rparam :value, type: Array, exclusion: %w(b c d)
-        expect(@controller.params[:value]).to eq ['a']
+        @controller.apply_each_rparam :value, type: Array, exclusion: 'a'
+        expect(@controller.params[:value]).to eq %w(b c)
 
-        get :index, params: { value: [nil, 1] }
-        @controller.apply_each_rparam :value, type: Array, exclusion: ['']
-        expect(@controller.params[:value]).to eq ['1']
+        get :index, params: { value: %w(a b c) }
+        @controller.apply_each_rparam :value, type: Array, exclusion: %w(b c d)
+        expect(@controller.params[:value]).to eq %w(a)
       end
 
     end

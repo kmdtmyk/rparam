@@ -32,18 +32,20 @@ module Rparam
         end
 
         if options[:inclusion].present?
+          inclusion = Array.wrap options[:inclusion]
           if value.is_a? Array
-            value = value & options[:inclusion]
+            value = value & inclusion
           else
-            value = nil unless value.in? options[:inclusion]
+            value = nil unless value.in? inclusion
           end
         end
 
         if options[:exclusion].present?
+          exclusion = Array.wrap options[:exclusion]
           if value.is_a? Array
-            value = value - options[:exclusion]
+            value = value - exclusion
           else
-            value = nil if value.in? options[:exclusion]
+            value = nil if value.in? exclusion
           end
         end
 
