@@ -68,7 +68,7 @@ module Rparam
       def save_parameter_to_cookie(name, value)
         hash = rparam_cookie
         hash[name] = value
-        cookies.permanent['parameter'] = {
+        cookies.permanent[:parameter] = {
           value: hash.to_json,
           path: request.path,
           httponly: true,
@@ -97,7 +97,7 @@ module Rparam
       end
 
       def rparam_cookie
-        cookie = cookies.permanent['parameter']
+        cookie = cookies.permanent[:parameter]
         JSON.parse(cookie, symbolize_names: true)
       rescue
         {}
