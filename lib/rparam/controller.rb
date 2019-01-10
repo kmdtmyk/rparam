@@ -106,8 +106,7 @@ module Rparam
       end
 
       def rparam_cookie
-        cookie = cookies.permanent[:parameter]
-        JSON.parse(cookie, symbolize_names: true)
+        JSON.parse(cookies[:parameter], symbolize_names: true)
       rescue
         {}
       end
