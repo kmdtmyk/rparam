@@ -153,7 +153,7 @@ RSpec.describe TestsController, type: :controller do
           @controller.apply_each_rparam :date, save: :relative_date
           expect(@controller.params[:date]).to eq ''
           expect(ControllerParameter.count).to eq 1
-          expect(ControllerParameter.first.value).to eq ''
+          expect(ControllerParameter.first.value).to eq nil
 
           get :index
           @controller.apply_each_rparam :date, save: :relative_date
@@ -165,6 +165,19 @@ RSpec.describe TestsController, type: :controller do
           @controller.apply_each_rparam :date, save: :relative_date
           expect(@controller.params[:date]).to eq nil
           expect(ControllerParameter.count).to eq 0
+        end
+
+        example 'invalid date' do
+          travel_to Date.new(2018, 10, 15)
+          get :index, params: { date: 'invalid' }
+          @controller.apply_each_rparam :date, save: :relative_date
+          # expect(@controller.params[:date]).to eq ''
+          expect(ControllerParameter.count).to eq 1
+          expect(ControllerParameter.first.value).to eq nil
+
+          get :index
+          @controller.apply_each_rparam :date, save: :relative_date
+          expect(@controller.params[:date]).to eq ''
         end
 
       end

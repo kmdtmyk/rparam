@@ -49,7 +49,9 @@ module Rparam
       def save_parameter(name, value, options)
         if options[:save] == :relative_date
           date = Parser::parse_date(value)
-          unless date.nil?
+          if date.nil?
+            value = nil
+          else
             value = (date - Time.zone.today).to_i
           end
         end
@@ -89,10 +91,17 @@ module Rparam
           end
           value = controller_parameter.value
         end
-        if options[:save] == :relative_date and value.present?
-          date = Time.zone.today + value.to_i
-          value = date.strftime '%F'
+
+        if options[:save] == :relative_date
+          difference = Parser::parse_int(value)
+          if difference.nil?
+            value = ''
+          else
+            date = Time.zone.today + difference
+            value = date.strftime '%F'
+          end
         end
+
         value
       end
 

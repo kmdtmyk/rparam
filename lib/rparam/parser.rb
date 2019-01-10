@@ -28,6 +28,12 @@ module Rparam
         nil
       end
 
+      def parse_int(value)
+        Integer(value)
+      rescue
+        nil
+      end
+
     end
 
   end
