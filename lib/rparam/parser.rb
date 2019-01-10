@@ -35,6 +35,8 @@ module Rparam
         if value.is_a? Array
           return value
         end
+        JSON.parse(value)
+      rescue
         return []
       end
 

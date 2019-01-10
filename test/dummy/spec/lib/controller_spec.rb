@@ -192,6 +192,20 @@ RSpec.describe TestsController, type: :controller do
 
       end
 
+      describe 'save array' do
+        example do
+          get :index, params: { value: %w(a b c) }
+          @controller.apply_each_rparam :value, type: Array, save: true
+          expect(@controller.params[:value]).to eq %w(a b c)
+          expect(ControllerParameter.count).to eq 1
+          expect(ControllerParameter.first.value).to eq %w(a b c).to_s
+
+          get :index
+          @controller.apply_each_rparam :value, type: Array, save: true
+          expect(@controller.params[:value]).to eq %w(a b c)
+        end
+      end
+
       describe 'save relative date' do
 
         example do
