@@ -49,8 +49,12 @@ module Rparam
           end
         end
 
-        if value.nil? and options[:default].present?
-          value = options[:default]
+        if options[:default].present?
+          if options[:save] == :relative_date
+            value = options[:default] if value.blank?
+          elsif value.nil?
+            value = options[:default]
+          end
         end
 
         if options[:type].present?

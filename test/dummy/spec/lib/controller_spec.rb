@@ -83,23 +83,27 @@ RSpec.describe TestsController, type: :controller do
         expect(@controller.params[:date]).to eq nil
       end
 
-      describe 'with default value' do
-        example do
-          today = Date.today
-          get :index
-          @controller.apply_each_rparam :value, type: Date, default: today
-          expect(@controller.params[:value]).to eq today
+      example 'with default value' do
+        today = Date.today
+        get :index
+        @controller.apply_each_rparam :value, type: Date, default: today
+        expect(@controller.params[:value]).to eq today
 
-          get :index
-          @controller.apply_each_rparam :value, type: Date, default: 7.days.ago
-          expect(@controller.params[:value]).to eq today - 7
+        get :index
+        @controller.apply_each_rparam :value, type: Date, default: 7.days.ago
+        expect(@controller.params[:value]).to eq today - 7
 
-          get :index, params: { value: '' }
-          @controller.apply_each_rparam :value, type: Date, default: today
-          expect(@controller.params[:value]).to eq nil
-        end
+        get :index, params: { value: '' }
+        @controller.apply_each_rparam :value, type: Date, default: today
+        expect(@controller.params[:value]).to eq nil
       end
 
+      example 'relative date with default value' do
+        today = Date.today
+        get :index
+        @controller.apply_each_rparam :value, type: Date, save: :relative_date, default: today
+        expect(@controller.params[:value]).to eq today
+      end
     end
 
     describe 'type: Array' do
