@@ -154,6 +154,10 @@ RSpec.describe TestsController, type: :controller do
           expect(@controller.params[:date]).to eq ''
           expect(ControllerParameter.count).to eq 1
           expect(ControllerParameter.first.value).to eq ''
+
+          get :index
+          @controller.apply_each_rparam :date, save: :relative_date
+          expect(@controller.params[:date]).to eq ''
         end
 
         example 'without params' do

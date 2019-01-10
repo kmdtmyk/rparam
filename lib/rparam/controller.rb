@@ -88,8 +88,8 @@ module Rparam
           end
           value = controller_parameter.value
         end
-        if options[:save] == :relative_date
-          date = Time.zone.today + value.to_i if value.present?
+        if options[:save] == :relative_date and value.present?
+          date = Time.zone.today + value.to_i
           value = date.strftime '%F'
         end
         value
