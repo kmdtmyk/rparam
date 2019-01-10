@@ -20,12 +20,16 @@ module Rparam
           return value
         end
 
-        if value.match /\d{4}/
-          Date.parse("#{value}-01-01")
-        elsif value.match /\d{4}[-\/]\d{1,2}/
-          Date.parse("#{value}-01")
-        else
-          Date.parse(value)
+        if value.is_a? String
+          if value.match /\d{4}/
+            Date.parse("#{value}-01-01")
+          elsif value.match /\d{4}[-\/]\d{1,2}/
+            Date.parse("#{value}-01")
+          else
+            Date.parse(value)
+          end
+        elsif value.respond_to? :to_date
+          value.to_date
         end
       rescue
         nil

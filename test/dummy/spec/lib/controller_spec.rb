@@ -90,6 +90,10 @@ RSpec.describe TestsController, type: :controller do
           @controller.apply_each_rparam :value, type: Date, default: today
           expect(@controller.params[:value]).to eq today
 
+          get :index
+          @controller.apply_each_rparam :value, type: Date, default: 7.days.ago
+          expect(@controller.params[:value]).to eq today - 7
+
           get :index, params: { value: '' }
           @controller.apply_each_rparam :value, type: Date, default: today
           expect(@controller.params[:value]).to eq nil
