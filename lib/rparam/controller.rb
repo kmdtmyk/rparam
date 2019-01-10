@@ -32,7 +32,11 @@ module Rparam
         end
 
         if options[:inclusion].present?
-          value = nil unless value.in? options[:inclusion]
+          if value.is_a? Array
+            value = value & options[:inclusion]
+          else
+            value = nil unless value.in? options[:inclusion]
+          end
         end
 
         if options[:type].present?

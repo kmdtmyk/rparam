@@ -87,6 +87,12 @@ RSpec.describe TestsController, type: :controller do
         expect(@controller.params[:value]).to eq []
       end
 
+      example 'with inclusion' do
+        get :index, params: { value: %w(a b c) }
+        @controller.apply_each_rparam :value, type: Array, inclusion: %w(b c d)
+        expect(@controller.params[:value]).to eq ['b', 'c']
+      end
+
     end
 
     describe 'save' do
