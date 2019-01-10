@@ -67,6 +67,28 @@ RSpec.describe TestsController, type: :controller do
 
     end
 
+    describe 'type: Array' do
+
+      example 'array' do
+        get :index, params: { value: %w(a b c) }
+        @controller.apply_each_rparam :value, type: Array
+        expect(@controller.params[:value]).to eq %w(a b c)
+      end
+
+      example 'not array' do
+        get :index, params: { value: 'invalid' }
+        @controller.apply_each_rparam :value, type: Array
+        expect(@controller.params[:value]).to eq []
+      end
+
+      example 'without parameter' do
+        get :index
+        @controller.apply_each_rparam :value, type: Array
+        expect(@controller.params[:value]).to eq []
+      end
+
+    end
+
     describe 'save' do
 
       example 'true' do

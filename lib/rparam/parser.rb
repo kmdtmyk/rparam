@@ -7,9 +7,12 @@ module Rparam
 
       def parse(value, type)
         if type == Date
-          return parse_date(value)
+          parse_date(value)
+        elsif type == Array
+          parse_array(value)
+        else
+          value
         end
-        value
       end
 
       def parse_date(value)
@@ -26,6 +29,13 @@ module Rparam
         end
       rescue
         nil
+      end
+
+      def parse_array(value)
+        if value.is_a? Array
+          return value
+        end
+        return []
       end
 
       def parse_int(value)

@@ -1,11 +1,29 @@
+<%= link_to url_for %>
+
 <form>
+
   <div>
     <label>date</label>
     <input type='date' name='from_date' value='<%= params[:from_date] %>'>
     <span> 〜 <span>
     <input type='date' name='to_date' value='<%= params[:to_date] %>'>
   </div>
+
+  <div>
+    <input type='hidden' name='checkbox[]'>
+    <label>
+      <%= check_box_tag 'checkbox[]', 'value1', 'value1'.in?(params[:checkbox] || []) %>
+      value1
+    </label>
+    <label>
+      <%= check_box_tag 'checkbox[]', 'value2', 'value2'.in?(params[:checkbox] || []) %>
+      value2
+    </label>
+  </div>
+
   <button type='submit'>submit</button>
 </form>
 
 <%= debug params %>
+
+<%= debug cookies[:parameter] %>
