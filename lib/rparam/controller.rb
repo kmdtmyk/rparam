@@ -58,7 +58,7 @@ module Rparam
         end
 
         if options[:type].present?
-          value = Parser::parse(value, options[:type])
+          value = Parser.parse(value, options[:type])
         end
 
         if value.nil? and options[:type] == Array
@@ -70,7 +70,7 @@ module Rparam
 
       def save_parameter(name, value, options)
         if options[:save] == :relative_date
-          date = Parser::parse_date(value)
+          date = Parser.parse_date(value)
           if date.nil?
             value = nil
           else
@@ -115,7 +115,7 @@ module Rparam
         end
 
         if options[:save] == :relative_date
-          difference = Parser::parse_int(value)
+          difference = Parser.parse_int(value)
           if difference.nil?
             value = ''
           else
