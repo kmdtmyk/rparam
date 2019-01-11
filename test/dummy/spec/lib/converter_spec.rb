@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Rparam::Converter do
+  include ActiveSupport::Testing::TimeHelpers
 
   describe 'add' do
 
@@ -93,13 +94,6 @@ RSpec.describe Rparam::Converter do
         expect(converter.diff[:value]).to eq nil
       end
 
-      example 'relative date with default value' do
-        today = Date.today
-        converter = Rparam::Converter.new
-        converter.add :value, type: Date, save: :relative_date, default: today
-        expect(converter.diff[:value]).to eq today
-      end
-
     end
 
     describe 'type: Array' do
@@ -152,6 +146,20 @@ RSpec.describe Rparam::Converter do
         expect(converter.diff[:value]).to eq %w(a b c)
       end
 
+      example 'save' do
+        converter = Rparam::Converter.new({ value: %w(a b c) })
+        converter.add :value, type: Array, save: true
+        expect(converter.diff[:value]).to eq %w(a b c)
+        expect(converter.memory[:value]).to eq %w(a b c)
+      end
+
+      example 'save with memory' do
+        converter = Rparam::Converter.new({}, { value: %w(a b c) })
+        converter.add :value, type: Array, save: true
+        expect(converter.diff[:value]).to eq %w(a b c)
+        expect(converter.memory[:value]).to eq %w(a b c)
+      end
+
     end
 
     describe 'save' do
@@ -180,6 +188,72 @@ RSpec.describe Rparam::Converter do
         converter.add :order, save: false
         expect(converter.diff[:order]).to eq nil
         expect(converter.memory.has_key? :order).to eq false
+      end
+
+      describe 'relative date' do
+
+        example do
+          travel_to Date.new(2018, 10, 15)
+          converter = Rparam::Converter.new({ value: '2018-10-20' })
+          converter.add :value, save: :relative_date
+          expect(converter.diff[:value]).to eq '2018-10-20'
+          expect(converter.memory[:value]).to eq 5
+        end
+
+        example 'blank' do
+          converter = Rparam::Converter.new({ value: '' })
+          converter.add :value, save: :relative_date
+          expect(converter.diff[:value]).to eq ''
+          expect(converter.memory[:value]).to eq nil
+        end
+
+        example 'without params' do
+          converter = Rparam::Converter.new
+          converter.add :value, save: :relative_date
+          expect(converter.diff[:value]).to eq ''
+          expect(converter.memory.has_key? :value).to eq false
+        end
+
+        example 'with default value' do
+          today = Date.today
+          converter = Rparam::Converter.new
+          converter.add :value, type: Date, save: :relative_date, default: today
+          expect(converter.diff[:value]).to eq today
+        end
+
+        describe 'with memory' do
+
+          example 'valid value' do
+            travel_to Date.new(2018, 10, 15)
+            converter = Rparam::Converter.new({}, { value: 5 })
+            converter.add :value, save: :relative_date
+            expect(converter.diff[:value]).to eq '2018-10-20'
+            expect(converter.memory[:value]).to eq 5
+          end
+
+          example 'invalid value' do
+            converter = Rparam::Converter.new({}, { value: 'invalid' })
+            converter.add :value, save: :relative_date
+            expect(converter.diff[:value]).to eq ''
+
+            converter = Rparam::Converter.new({}, { value: '' })
+            converter.add :value, save: :relative_date
+            expect(converter.diff[:value]).to eq ''
+
+            converter = Rparam::Converter.new({}, { value: nil })
+            converter.add :value, save: :relative_date
+            expect(converter.diff[:value]).to eq ''
+          end
+
+          example 'invalid value with default value' do
+            travel_to Date.new(2018, 10, 15)
+            converter = Rparam::Converter.new({}, { value: nil })
+            converter.add :value, save: :relative_date, default: Date.today
+            expect(converter.diff[:value]).to eq '2018-10-15'
+          end
+
+        end
+
       end
 
     end
