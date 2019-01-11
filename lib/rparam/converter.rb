@@ -3,8 +3,8 @@
 module Rparam
   class Converter
 
-    def initialize(params, memory = nil)
-      @params = params
+    def initialize(params = nil, memory = nil)
+      @params = params || {}
       @memory = memory || {}
       @diff = {}
     end
