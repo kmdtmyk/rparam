@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Rparam
-  class Converter
+  class Calculator
 
     def initialize(params = nil, memory = nil)
       @params = params || {}
       @memory = memory || {}
-      @diff = {}
+      @result = {}
     end
 
     def add(name, options)
@@ -55,7 +55,7 @@ module Rparam
         value = []
       end
 
-      @diff[name] = value
+      @result[name] = value
     end
 
     def write_memory(name, value, options)
@@ -84,8 +84,8 @@ module Rparam
       value
     end
 
-    def diff
-      @diff.dup
+    def result
+      @result.dup
     end
 
     def memory

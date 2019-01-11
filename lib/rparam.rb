@@ -5,7 +5,7 @@ require 'rparam/controller'
 require 'rparam/model'
 require 'rparam/parameter'
 require 'rparam/parser'
-require 'rparam/converter'
+require 'rparam/calculator'
 
 module Rparam
   # Your code goes here...
