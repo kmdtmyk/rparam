@@ -7,13 +7,11 @@ module Rparam
     included do
 
       def apply_rparam
-        if parameter_class.nil?
-          return
-        end
+        return if parameter_class.nil?
         parameter = parameter_class.new
-        if parameter.respond_to? action_name and parameter.method(action_name).owner == parameter_class
-          parameter.send action_name
-        end
+        return unless parameter.respond_to? action_name
+        return unless parameter.method(action_name).owner == parameter_class
+        parameter.send action_name
         parameter.each do |name, options|
           apply_each_rparam(name, options)
         end
