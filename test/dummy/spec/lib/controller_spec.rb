@@ -164,24 +164,24 @@ RSpec.describe TestsController, type: :controller do
         get :index, params: { order: 'asc' }
         @controller.apply_each_rparam :order, save: true
         expect(@controller.params[:order]).to eq 'asc'
-        expect(ControllerParameter.count).to eq 0
+        expect(RparamMemory.count).to eq 0
 
         get :index
         @controller.apply_each_rparam :order, save: true
         expect(@controller.params[:order]).to eq 'asc'
-        expect(ControllerParameter.count).to eq 0
+        expect(RparamMemory.count).to eq 0
       end
 
       example 'false' do
         get :index, params: { order: 'asc' }
         @controller.apply_each_rparam :order, save: false
         expect(@controller.params[:order]).to eq 'asc'
-        expect(ControllerParameter.count).to eq 0
+        expect(RparamMemory.count).to eq 0
 
         get :index
         @controller.apply_each_rparam :order, save: false
         expect(@controller.params[:order]).to eq nil
-        expect(ControllerParameter.count).to eq 0
+        expect(RparamMemory.count).to eq 0
       end
 
     end
@@ -197,24 +197,24 @@ RSpec.describe TestsController, type: :controller do
           get :index, params: { order: 'asc' }
           @controller.apply_each_rparam :order, save: true
           expect(@controller.params[:order]).to eq 'asc'
-          expect(ControllerParameter.count).to eq 1
+          expect(RparamMemory.count).to eq 1
 
           get :index
           @controller.apply_each_rparam :order, save: true
           expect(@controller.params[:order]).to eq 'asc'
-          expect(ControllerParameter.count).to eq 1
+          expect(RparamMemory.count).to eq 1
         end
 
         example 'false' do
           get :index, params: { order: 'asc' }
           @controller.apply_each_rparam :order, save: false
           expect(@controller.params[:order]).to eq 'asc'
-          expect(ControllerParameter.count).to eq 0
+          expect(RparamMemory.count).to eq 0
 
           get :index
           @controller.apply_each_rparam :order, save: false
           expect(@controller.params[:order]).to eq nil
-          expect(ControllerParameter.count).to eq 0
+          expect(RparamMemory.count).to eq 0
         end
 
       end
@@ -224,8 +224,8 @@ RSpec.describe TestsController, type: :controller do
           get :index, params: { value: %w(a b c) }
           @controller.apply_each_rparam :value, type: Array, save: true
           expect(@controller.params[:value]).to eq %w(a b c)
-          expect(ControllerParameter.count).to eq 1
-          expect(ControllerParameter.first.value).to eq %w(a b c).to_s
+          expect(RparamMemory.count).to eq 1
+          expect(RparamMemory.first.value).to eq %w(a b c).to_s
 
           get :index
           @controller.apply_each_rparam :value, type: Array, save: true
@@ -240,8 +240,8 @@ RSpec.describe TestsController, type: :controller do
           get :index, params: { date: '2018-10-20' }
           @controller.apply_each_rparam :date, save: :relative_date
           expect(@controller.params[:date]).to eq '2018-10-20'
-          expect(ControllerParameter.count).to eq 1
-          expect(ControllerParameter.first.value).to eq '5'
+          expect(RparamMemory.count).to eq 1
+          expect(RparamMemory.first.value).to eq '5'
 
           get :index
           @controller.apply_each_rparam :date, save: :relative_date
@@ -257,8 +257,8 @@ RSpec.describe TestsController, type: :controller do
           get :index, params: { date: '' }
           @controller.apply_each_rparam :date, save: :relative_date
           expect(@controller.params[:date]).to eq ''
-          expect(ControllerParameter.count).to eq 1
-          expect(ControllerParameter.first.value).to eq nil
+          expect(RparamMemory.count).to eq 1
+          expect(RparamMemory.first.value).to eq nil
 
           get :index
           @controller.apply_each_rparam :date, save: :relative_date
@@ -269,7 +269,7 @@ RSpec.describe TestsController, type: :controller do
           get :index
           @controller.apply_each_rparam :date, save: :relative_date
           expect(@controller.params[:date]).to eq nil
-          expect(ControllerParameter.count).to eq 0
+          expect(RparamMemory.count).to eq 0
         end
 
         example 'invalid date' do
@@ -277,8 +277,8 @@ RSpec.describe TestsController, type: :controller do
           get :index, params: { date: 'invalid' }
           @controller.apply_each_rparam :date, save: :relative_date
           # expect(@controller.params[:date]).to eq ''
-          expect(ControllerParameter.count).to eq 1
-          expect(ControllerParameter.first.value).to eq nil
+          expect(RparamMemory.count).to eq 1
+          expect(RparamMemory.first.value).to eq nil
 
           get :index
           @controller.apply_each_rparam :date, save: :relative_date

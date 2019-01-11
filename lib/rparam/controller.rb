@@ -81,11 +81,11 @@ module Rparam
         if user.nil?
           save_parameter_to_cookie(name, value)
         else
-          controller_parameter = user.controller_parameters.find_or_create_by(
+          rparam_memory = user.rparam_memories.find_or_create_by(
             action: full_action_name,
             name: name,
           )
-          controller_parameter.update(value: value)
+          rparam_memory.update(value: value)
         end
       end
 
@@ -104,14 +104,14 @@ module Rparam
         if user.nil?
           value = rparam_cookie[name]
         else
-          controller_parameter = user.controller_parameters.find_by(
+          rparam_memory = user.rparam_memories.find_by(
             action: full_action_name,
             name: name,
           )
-          if controller_parameter.nil?
+          if rparam_memory.nil?
             return nil
           end
-          value = controller_parameter.value
+          value = rparam_memory.value
         end
 
         if options[:save] == :relative_date

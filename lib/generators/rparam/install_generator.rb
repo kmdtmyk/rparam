@@ -11,8 +11,8 @@ module Rparam
       source_root File.expand_path('../templates', __FILE__)
 
       def install
-        migration_template 'migration.rb', 'db/migrate/create_controller_parameters.rb', migration_version: migration_version
-        template 'model.rb', 'app/models/controller_parameter.rb'
+        migration_template 'migration.rb', 'db/migrate/create_rparam_memories.rb', migration_version: migration_version
+        template 'model.rb', 'app/models/rparam_memory.rb'
       end
 
       def self.next_migration_number(*args)

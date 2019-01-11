@@ -67,12 +67,12 @@ RSpec.describe ExamplesController, type: :controller do
     subject{ get action, params: { sort: 'asc' } }
 
     context 'first time' do
-      it{ expect{ subject }.to change{ ControllerParameter.count }.by 1 }
+      it{ expect{ subject }.to change{ RparamMemory.count }.by 1 }
     end
 
     context 'next time' do
       before{ subject }
-      it{ expect{ subject }.to change{ ControllerParameter.count }.by 0 }
+      it{ expect{ subject }.to change{ RparamMemory.count }.by 0 }
     end
 
     context 'next time without param' do

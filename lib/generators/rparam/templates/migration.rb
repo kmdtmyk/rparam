@@ -1,6 +1,6 @@
-class CreateControllerParameters < ActiveRecord::Migration<%= migration_version %>
+class CreateRparamMemories < ActiveRecord::Migration<%= migration_version %>
   def change
-    create_table :controller_parameters do |t|
+    create_table :rparam_memories do |t|
       t.references :user, polymorphic: true, index: true
       t.string :action
       t.string :name
