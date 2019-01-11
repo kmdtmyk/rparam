@@ -6,11 +6,18 @@ module Rparam
 
     included do
 
+      def rparam_parameter
+        class_name = self.class.name[0..-11] + 'Parameter'
+        class_name.constantize.new
+      rescue
+        nil
+      end
+
       def apply_rparam
-        return if parameter_class.nil?
-        parameter = parameter_class.new
+        parameter = rparam_parameter
+        return if parameter.nil?
         return unless parameter.respond_to? action_name
-        return unless parameter.method(action_name).owner == parameter_class
+        # return unless parameter.method(action_name).owner == parameter.class
         parameter.send action_name
         parameter.each do |name, options|
           apply_each_rparam(name, options)
@@ -137,13 +144,6 @@ module Rparam
 
       def full_action_name
         "#{controller_name}##{action_name}"
-      end
-
-      def parameter_class
-        class_name = self.class.name[0..-11] + 'Parameter'
-        class_name.constantize
-      rescue
-        nil
       end
 
     end
