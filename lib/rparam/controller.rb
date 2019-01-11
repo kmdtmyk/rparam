@@ -33,7 +33,7 @@ module Rparam
       def rparam_memory
         user = current_rparam_user
         if user.nil?
-          return rparam_cookie
+          return JSON.parse(cookies[:parameters], symbolize_names: true)
         end
 
         rparam_memory = user.rparam_memories.find_by(
@@ -43,12 +43,6 @@ module Rparam
           return nil
         end
         JSON.parse(rparam_memory.value, symbolize_names: true)
-      rescue
-        nil
-      end
-
-      def rparam_cookie
-        JSON.parse(cookies[:parameters], symbolize_names: true)
       rescue
         nil
       end
