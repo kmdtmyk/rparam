@@ -16,7 +16,6 @@ ActiveRecord::Schema.define(version: 2019_01_07_092249) do
     t.string "user_type"
     t.integer "user_id"
     t.string "action"
-    t.string "name"
     t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
