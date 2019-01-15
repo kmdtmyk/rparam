@@ -63,7 +63,7 @@ module Rparam
     end
 
     def write_memory(name, value, options)
-      if options[:save] == :relative_date and value != ''
+      if options[:save] == :relative_date
         date = Parser.parse_date(value)
         if date.nil?
           value = nil
@@ -76,8 +76,11 @@ module Rparam
 
     def read_memory(name, options)
       value = @memory[name]
-      if options[:save] == :relative_date
+      if options[:save] == :relative_date and @memory.has_key? name
         difference = Parser.parse_int(value)
+        if difference.nil?
+          return ''
+        end
         date = Time.zone.today + difference
         date.strftime '%F'
       else
