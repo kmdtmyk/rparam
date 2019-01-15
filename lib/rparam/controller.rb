@@ -51,7 +51,7 @@ module Rparam
         user = current_rparam_user
         if user.nil?
           cookies.permanent[:parameters] = {
-            value: hash.to_json,
+            value: memory.to_json,
             path: request.path,
             httponly: true,
           }
