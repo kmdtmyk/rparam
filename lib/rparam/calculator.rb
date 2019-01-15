@@ -43,10 +43,10 @@ module Rparam
         end
       end
 
-      if options[:default].present? and @params[name] != ''
+      if options[:default].present? and value.nil?
         if options[:save] == :relative_date
           value = options[:default].to_s
-        elsif value.nil?
+        else
           value = options[:default]
         end
       end
@@ -57,6 +57,10 @@ module Rparam
 
       if value.nil? and @params[name] != ''
         value = options[:default]
+      end
+
+      if options[:save] == :relative_date and value.nil?
+        value = ''
       end
 
       @result[name] = value
@@ -79,7 +83,7 @@ module Rparam
       if options[:save] == :relative_date
         difference = Parser.parse_int(value)
         if difference.nil?
-          value = ''
+          value = nil
         else
           date = Time.zone.today + difference
           value = date.strftime '%F'

@@ -266,6 +266,14 @@ RSpec.describe Rparam::Calculator do
             expect(calculator.memory[:value]).to eq 5
           end
 
+          example 'valid value with default' do
+            travel_to Date.new(2018, 10, 15)
+            calculator = Rparam::Calculator.new({}, { value: 5 })
+            calculator.add :value, save: :relative_date, default: Date.today
+            expect(calculator.result[:value]).to eq '2018-10-20'
+            expect(calculator.memory[:value]).to eq 5
+          end
+
           example 'invalid value' do
             calculator = Rparam::Calculator.new({}, { value: 'invalid' })
             calculator.add :value, save: :relative_date
@@ -280,7 +288,7 @@ RSpec.describe Rparam::Calculator do
             expect(calculator.result[:value]).to eq ''
           end
 
-          example 'invalid value with default value' do
+          example 'invalid value with default' do
             travel_to Date.new(2018, 10, 15)
             calculator = Rparam::Calculator.new({}, { value: nil })
             calculator.add :value, save: :relative_date, default: Date.today
