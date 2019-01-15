@@ -49,6 +49,28 @@ RSpec.describe Rparam::Calculator do
 
     end
 
+    describe 'type: Integer' do
+
+      example do
+        calculator = Rparam::Calculator.new({ value: '1' })
+        calculator.add :value, type: Integer
+        expect(calculator.result[:value]).to eq 1
+      end
+
+      example 'invalid value' do
+        calculator = Rparam::Calculator.new({ value: 'invalid' })
+        calculator.add :value, type: Integer
+        expect(calculator.result[:value]).to eq nil
+      end
+
+      example 'without params' do
+        calculator = Rparam::Calculator.new
+        calculator.add :value, type: Integer
+        expect(calculator.result[:value]).to eq nil
+      end
+
+    end
+
     describe 'type: Date' do
 
       example 'date' do
