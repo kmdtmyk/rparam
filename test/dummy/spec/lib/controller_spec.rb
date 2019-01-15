@@ -24,4 +24,33 @@ RSpec.describe TestsController, type: :controller do
 
   end
 
+  describe 'full_action_name' do
+    it do
+      get :index
+      expect(@controller.full_action_name).to eq 'tests#index'
+    end
+  end
+
+end
+
+RSpec.describe Foo::TestsController, type: :controller do
+
+  describe 'full_action_name' do
+    it do
+      get :index
+      expect(@controller.full_action_name).to eq 'foo/tests#index'
+    end
+  end
+
+end
+
+RSpec.describe Foo::Bar::TestsController, type: :controller do
+
+  describe 'full_action_name' do
+    it do
+      get :index
+      expect(@controller.full_action_name).to eq 'foo/bar/tests#index'
+    end
+  end
+
 end

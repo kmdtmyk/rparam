@@ -68,7 +68,12 @@ module Rparam
       end
 
       def full_action_name
-        "#{controller_name}##{action_name}"
+        parent_name = self.class.parent_name
+        if parent_name.nil?
+          "#{controller_name}##{action_name}"
+        else
+          "#{parent_name.gsub('::', '/').downcase}/#{controller_name}##{action_name}"
+        end
       end
 
     end
