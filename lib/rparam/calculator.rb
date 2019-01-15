@@ -63,7 +63,7 @@ module Rparam
     end
 
     def write_memory(name, value, options)
-      if options[:save] == :relative_date
+      if options[:save] == :relative_date and value != ''
         date = Parser.parse_date(value)
         if date.nil?
           value = nil

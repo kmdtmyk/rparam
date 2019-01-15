@@ -239,7 +239,7 @@ RSpec.describe Rparam::Calculator do
           calculator = Rparam::Calculator.new({ value: '' })
           calculator.add :value, save: :relative_date
           expect(calculator.result[:value]).to eq ''
-          expect(calculator.memory[:value]).to eq nil
+          expect(calculator.memory[:value]).to eq ''
         end
 
         example 'without params' do
