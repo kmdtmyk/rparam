@@ -245,7 +245,7 @@ RSpec.describe Rparam::Calculator do
         example 'without params' do
           calculator = Rparam::Calculator.new
           calculator.add :value, save: :relative_date
-          expect(calculator.result[:value]).to eq ''
+          expect(calculator.result[:value]).to eq nil
           expect(calculator.memory.has_key? :value).to eq false
         end
 
@@ -277,15 +277,15 @@ RSpec.describe Rparam::Calculator do
           example 'invalid value' do
             calculator = Rparam::Calculator.new({}, { value: 'invalid' })
             calculator.add :value, save: :relative_date
-            expect(calculator.result[:value]).to eq ''
+            expect(calculator.result[:value]).to eq nil
 
             calculator = Rparam::Calculator.new({}, { value: '' })
             calculator.add :value, save: :relative_date
-            expect(calculator.result[:value]).to eq ''
+            expect(calculator.result[:value]).to eq nil
 
             calculator = Rparam::Calculator.new({}, { value: nil })
             calculator.add :value, save: :relative_date
-            expect(calculator.result[:value]).to eq ''
+            expect(calculator.result[:value]).to eq nil
           end
 
           example 'invalid value with default' do
