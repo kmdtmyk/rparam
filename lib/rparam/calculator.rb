@@ -39,9 +39,9 @@ module Rparam
         end
       end
 
-      if options[:default].present?
+      if options[:default].present? and @params[name] != ''
         if options[:save] == :relative_date
-          value = options[:default].to_s if value.blank?
+          value = options[:default].to_s
         elsif value.nil?
           value = options[:default]
         end
@@ -51,8 +51,8 @@ module Rparam
         value = Parser.parse(value, options[:type])
       end
 
-      if value.nil? and options[:type] == Array
-        value = []
+      if value.nil? and @params[name] != ''
+        value = options[:default]
       end
 
       @result[name] = value

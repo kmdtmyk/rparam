@@ -107,13 +107,13 @@ RSpec.describe Rparam::Calculator do
       example 'not array' do
         calculator = Rparam::Calculator.new({ value: 'invalid' })
         calculator.add :value, type: Array
-        expect(calculator.result[:value]).to eq []
+        expect(calculator.result[:value]).to eq nil
       end
 
       example 'without parameter' do
         calculator = Rparam::Calculator.new
         calculator.add :value, type: Array
-        expect(calculator.result[:value]).to eq []
+        expect(calculator.result[:value]).to eq nil
       end
 
       example 'with inclusion' do
@@ -144,6 +144,14 @@ RSpec.describe Rparam::Calculator do
         calculator = Rparam::Calculator.new
         calculator.add :value, type: Array, default: %w(a b c)
         expect(calculator.result[:value]).to eq %w(a b c)
+
+        calculator = Rparam::Calculator.new({ value: 'invalid' })
+        calculator.add :value, type: Array, default: []
+        expect(calculator.result[:value]).to eq []
+
+        calculator = Rparam::Calculator.new
+        calculator.add :value, type: Array, default: []
+        expect(calculator.result[:value]).to eq []
       end
 
       example 'save' do
