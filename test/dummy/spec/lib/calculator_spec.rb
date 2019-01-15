@@ -208,6 +208,11 @@ RSpec.describe Rparam::Calculator do
         expect(calculator.memory[:order]).to eq 'asc'
       end
 
+      example 'ignore invalid memory' do
+        calculator = Rparam::Calculator.new({}, 123)
+        expect{ calculator.add(:value, save: true) }.not_to raise_error
+      end
+
       example 'false' do
         calculator = Rparam::Calculator.new({ order: 'asc' })
         calculator.add :order, save: false

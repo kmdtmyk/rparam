@@ -5,8 +5,12 @@ module Rparam
 
     def initialize(params = nil, memory = nil)
       @params = params || {}
-      @memory = memory || {}
+      @memory = {}
       @result = {}
+      begin
+        @memory.merge! memory
+      rescue
+      end
     end
 
     def add(name, options)
@@ -82,6 +86,8 @@ module Rparam
         end
       end
       value
+    rescue
+      nil
     end
 
     def result
