@@ -52,8 +52,8 @@ module Rparam
         value = Parser.parse(value, options[:type])
       end
 
-      if value.nil? and @params[name] != ''
-        value = options[:default]
+      if value.nil? && options[:type] == Array
+        value = []
       end
 
       @result[name] = value
