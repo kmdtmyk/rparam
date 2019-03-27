@@ -33,7 +33,7 @@ module Rparam
       def rparam_memory
         user = current_rparam_user
         if user.nil?
-          return JSON.parse(cookies[:rparam_memory], symbolize_names: true)
+          return JSON.parse(cookies.signed[:rparam_memory], symbolize_names: true)
         end
 
         rparam_memory = user.rparam_memories.find_by(
@@ -50,7 +50,7 @@ module Rparam
       def save_rparam_memory(memory)
         user = current_rparam_user
         if user.nil?
-          cookies.permanent[:rparam_memory] = {
+          cookies.permanent.signed[:rparam_memory] = {
             value: memory.to_json,
             path: request.path,
             httponly: true,
