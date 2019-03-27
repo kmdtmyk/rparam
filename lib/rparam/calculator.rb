@@ -44,11 +44,7 @@ module Rparam
       end
 
       if options[:default].present? and value.nil?
-        if options[:save] == :relative_date
-          value = options[:default].to_s
-        else
-          value = options[:default]
-        end
+        value = default_value(options)
       end
 
       if options[:type].present?
@@ -65,11 +61,10 @@ module Rparam
     def write_memory(name, value, options)
       if options[:save] == :relative_date
         date = Parser.parse_date(value)
-        if date.nil?
-          value = nil
-        else
-          value = (date - Time.zone.today).to_i
-        end
+        value = difference_in_day(date)
+      elsif options[:save] == :relative_month
+        date = Parser.parse_date(value)
+        value = difference_in_month(date)
       end
       @memory[name] = value
     end
@@ -83,6 +78,13 @@ module Rparam
         end
         date = Time.zone.today + difference
         date.strftime '%F'
+      elsif options[:save] == :relative_month and @memory.has_key? name
+        difference = Parser.parse_int(value)
+        if difference.nil?
+          return ''
+        end
+        date = Time.zone.today.next_month difference
+        date.strftime '%Y-%m'
       else
         value
       end
@@ -97,6 +99,34 @@ module Rparam
     def memory
       @memory.dup
     end
+
+    private
+
+      def difference_in_day(date1, date2 = Time.zone.today)
+        if date1.nil?
+          return
+        end
+        (date1 - date2).to_i
+      end
+
+      def difference_in_month(date1, date2 = Time.zone.today)
+        if date1.nil?
+          return
+        end
+        (date1.year * 12 + date1.month) - (date2.year * 12 + date2.month)
+      end
+
+      def default_value(options)
+        value = options[:default]
+        if options[:save] == :relative_date
+          value.to_s
+        elsif options[:save] == :relative_month
+          date = Parser.parse_date(value)
+          (date - date.day + 1).strftime('%Y-%m')
+        else
+          value
+        end
+      end
 
   end
 end
