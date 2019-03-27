@@ -52,6 +52,10 @@ module Rparam
         value = Parser.parse(value, options[:type])
       end
 
+      if options[:type] == Integer and value.present?
+        value = clamp(value, options)
+      end
+
       if value.nil? && options[:type] == Array
         value = []
       end
@@ -113,6 +117,21 @@ module Rparam
         else
           value
         end
+      end
+
+      def clamp(value, options)
+        min = options[:min]
+        max = options[:max]
+
+        if min.present? and value < min
+          value = min
+        end
+
+        if max.present? and max < value
+          value = max
+        end
+
+        value
       end
 
   end
