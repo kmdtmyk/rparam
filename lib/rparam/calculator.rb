@@ -70,6 +70,9 @@ module Rparam
       elsif options[:save] == :relative_month
         date = Parser.parse_date(value)
         value = date&.difference_in_month
+      elsif options[:save] == :relative_year
+        date = Parser.parse_date(value)
+        value = date&.difference_in_year
       end
       @memory[name] = value
     end
@@ -82,7 +85,7 @@ module Rparam
           return ''
         end
         date = Time.zone.today + difference
-        date.strftime '%F'
+        date.strftime '%Y-%m-%d'
       elsif options[:save] == :relative_month and @memory.has_key? name
         difference = Parser.parse_int(value)
         if difference.nil?
@@ -90,6 +93,13 @@ module Rparam
         end
         date = Time.zone.today.next_month difference
         date.strftime '%Y-%m'
+      elsif options[:save] == :relative_year and @memory.has_key? name
+        difference = Parser.parse_int(value)
+        if difference.nil?
+          return ''
+        end
+        date = Time.zone.today.next_year difference
+        date.strftime '%Y'
       else
         value
       end
@@ -114,6 +124,9 @@ module Rparam
         elsif options[:save] == :relative_month
           date = Parser.parse_date(value)
           date.start_of_month.strftime '%Y-%m'
+        elsif options[:save] == :relative_year
+          date = Parser.parse_date(value)
+          date.start_of_month.strftime '%Y'
         else
           value
         end
