@@ -18,14 +18,20 @@
     </span>
 
     <span>
+      <label>integer</label>
+      <input type='number' name='integer' value='<%= params[:integer] %>'>
+      (1〜10)
+    </span>
+
+    <span>
       <label>checkbox</label>
       <input type='hidden' name='checkbox[]'>
       <label>
-        <%= check_box_tag 'checkbox[]', 'value1', 'value1'.in?(params[:checkbox] || []) %>
+        <%= check_box_tag 'checkbox[]', 'value1', 'value1'.in?(params[:checkbox]) %>
         value1
       </label>
       <label>
-        <%= check_box_tag 'checkbox[]', 'value2', 'value2'.in?(params[:checkbox] || []) %>
+        <%= check_box_tag 'checkbox[]', 'value2', 'value2'.in?(params[:checkbox]) %>
         value2
       </label>
     </span>
