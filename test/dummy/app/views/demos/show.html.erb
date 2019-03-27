@@ -1,5 +1,9 @@
 <%= link_to url_for %>
 
+<hr>
+
+<h3>form</h3>
+
 <form>
 
   <div>
@@ -24,6 +28,12 @@
   <button type='submit'>submit</button>
 </form>
 
+<hr>
+
+<h3>params</h3>
 <%= debug params %>
 
-<%= debug cookies[:parameters] %>
+<hr>
+
+<h3>cookies</h3>
+<%= debug cookies.signed[:rparam_memory] %>
