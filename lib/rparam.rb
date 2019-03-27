@@ -2,6 +2,7 @@
 
 require 'rparam/railtie'
 require 'rparam/controller'
+require 'rparam/date_ext'
 require 'rparam/model'
 require 'rparam/parameter'
 require 'rparam/parser'

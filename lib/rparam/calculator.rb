@@ -2,6 +2,7 @@
 
 module Rparam
   class Calculator
+    using DateExt
 
     def initialize(params = nil, memory = nil)
       @params = params || {}
@@ -61,10 +62,10 @@ module Rparam
     def write_memory(name, value, options)
       if options[:save] == :relative_date
         date = Parser.parse_date(value)
-        value = difference_in_day(date)
+        value = date&.difference_in_day
       elsif options[:save] == :relative_month
         date = Parser.parse_date(value)
-        value = difference_in_month(date)
+        value = date&.difference_in_month
       end
       @memory[name] = value
     end
@@ -102,27 +103,13 @@ module Rparam
 
     private
 
-      def difference_in_day(date1, date2 = Time.zone.today)
-        if date1.nil?
-          return
-        end
-        (date1 - date2).to_i
-      end
-
-      def difference_in_month(date1, date2 = Time.zone.today)
-        if date1.nil?
-          return
-        end
-        (date1.year * 12 + date1.month) - (date2.year * 12 + date2.month)
-      end
-
       def default_value(options)
         value = options[:default]
         if options[:save] == :relative_date
           value.to_s
         elsif options[:save] == :relative_month
           date = Parser.parse_date(value)
-          (date - date.day + 1).strftime('%Y-%m')
+          date.start_of_month.strftime '%Y-%m'
         else
           value
         end
