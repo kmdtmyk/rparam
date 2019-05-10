@@ -50,6 +50,14 @@ class User < ApplicationRecord
 end
 ```
 
+## Test
+
+```
+docker-compose run --rm app bash
+cd test/dummy
+rspec
+```
+
 ## License
 
 MIT
