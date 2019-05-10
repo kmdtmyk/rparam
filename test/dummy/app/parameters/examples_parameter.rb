@@ -14,8 +14,4 @@ class ExamplesParameter < Rparam::Parameter
     param :date, type: Date
   end
 
-  def index_save
-    param :sort, save: true
-  end
-
 end

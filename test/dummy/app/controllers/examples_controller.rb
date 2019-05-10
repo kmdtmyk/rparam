@@ -2,27 +2,21 @@
 
 class ExamplesController < ApplicationController
   before_action :apply_rparam
-  before_action :render_nothing
 
   def index
+    render plain: nil
   end
 
   def index_inclusion
+    render plain: nil
   end
 
   def index_inclusion_default
+    render plain: nil
   end
 
   def index_date
+    render plain: nil
   end
-
-  def index_save
-  end
-
-  private
-
-    def render_nothing
-      render plain: nil
-    end
 
 end

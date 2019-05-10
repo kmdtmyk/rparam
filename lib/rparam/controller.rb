@@ -64,7 +64,7 @@ module Rparam
       end
 
       def current_rparam_user
-        current_user
+        current_user if defined? current_user
       end
 
       def full_action_name
