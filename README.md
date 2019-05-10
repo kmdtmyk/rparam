@@ -39,6 +39,8 @@ or
 gem 'rparam', git: 'https://github.com/kmdtmyk/rparam', ref: '<commit_hash>'
 ```
 
+This saves parameters to cookie or database. Cookie is used as default. If you want to use database, please execute below.
+
 ```bash
 rails g rparam:install
 rails db:migrate

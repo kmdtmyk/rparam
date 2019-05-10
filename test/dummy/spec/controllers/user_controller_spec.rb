@@ -41,6 +41,14 @@ RSpec.describe UserController, type: :controller do
         end
       end
 
+      context 'no method error' do
+        before{ allow(user).to receive(:rparam_memories).and_raise(NoMethodError) }
+        it 'use cookie' do
+          expect{ subject }.to change{ RparamMemory.count }.by 0
+          expect(response.cookies).to_not eq({})
+        end
+      end
+
     end
 
   end

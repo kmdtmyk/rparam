@@ -36,12 +36,14 @@ module Rparam
           return JSON.parse(cookies.signed[:rparam_memory], symbolize_names: true)
         end
 
-        rparam_memory = user.rparam_memories.find_by(
-          action: full_action_name,
-        )
-        if rparam_memory.nil?
-          return nil
+        begin
+          rparam_memory = user.rparam_memories.find_by(
+            action: full_action_name,
+          )
+        rescue NoMethodError
+          return JSON.parse(cookies.signed[:rparam_memory], symbolize_names: true)
         end
+
         JSON.parse(rparam_memory.value, symbolize_names: true)
       rescue
         nil
@@ -49,18 +51,24 @@ module Rparam
 
       def save_rparam_memory(memory)
         user = current_rparam_user
-        if user.nil?
-          cookies.permanent.signed[:rparam_memory] = {
-            value: memory.to_json,
-            path: request.path,
-            httponly: true,
-          }
-        else
-          rparam_memory = user.rparam_memories.find_or_create_by(
-            action: full_action_name,
-          )
-          rparam_memory.update(value: memory.to_json)
+
+        if user.present?
+          begin
+            rparam_memory = user.rparam_memories.find_or_create_by(
+              action: full_action_name,
+            )
+            rparam_memory.update(value: memory.to_json)
+            return
+          rescue NoMethodError
+            # use cookie
+          end
         end
+
+        cookies.permanent.signed[:rparam_memory] = {
+          value: memory.to_json,
+          path: request.path,
+          httponly: true,
+        }
       end
 
       def current_rparam_user
