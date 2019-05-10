@@ -1,28 +1,55 @@
 # Rparam
-Short description and motivation.
 
 ## Usage
-How to use my plugin.
-
-## Installation
-Add this line to your application's Gemfile:
 
 ```ruby
-gem 'rparam'
+class AccessLogsController < ApplicationController
+  before_action :apply_rparam
+
+  def index
+    @access_logs = AccessLog.where(date: params[:date])
+      .where(level: params[:level])
+      .order(created_at: params[:order])
+  end
+
+end
 ```
 
-And then execute:
+```ruby
+class AccessLogsParameter < Rparam::Parameter
+
+  def index
+    param :date, type: Date, default: Time.zone.today
+    param :level, type: Array ,save: true, default: %w(debug info error)
+    param :order, save: true,  inclusion: %w(asc desc), default: 'desc'
+  end
+
+end
+```
+
+## Installation
+
+```ruby
+gem 'rparam', git: 'https://github.com/kmdtmyk/rparam', tag: '<tag_name>'
+```
+
+or
+
+```ruby
+gem 'rparam', git: 'https://github.com/kmdtmyk/rparam', ref: '<commit_hash>'
+```
+
 ```bash
-$ bundle
+rails g rparam:install
+rails db:migrate
 ```
 
-Or install it yourself as:
-```bash
-$ gem install rparam
+```ruby
+class User < ApplicationRecord
+  acts_as_rparam_user
+end
 ```
-
-## Contributing
-Contribution directions go here.
 
 ## License
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+MIT
