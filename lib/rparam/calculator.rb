@@ -27,11 +27,11 @@ module Rparam
       end
 
       if options.has_key? :inclusion
-        value = apply_inclusion(value, options[:inclusion])
+        value = Transformer.inclusion(value, options[:inclusion])
       end
 
       if options.has_key? :exclusion
-        value = apply_exclusion(value, options[:exclusion])
+        value = Transformer.exclusion(value, options[:exclusion])
       end
 
       if options.has_key? :default and value.nil?
@@ -42,8 +42,8 @@ module Rparam
         value = apply_type(value, options[:type])
       end
 
-      if options[:type] == Integer and value.present?
-        value = clamp(value, options)
+      if options.has_key? :min or options.has_key? :max
+        value = Transformer.clamp(value, options[:min], options[:max])
       end
 
       @result[name] = value
@@ -103,34 +103,6 @@ module Rparam
 
     private
 
-      def apply_inclusion(value, inclusion)
-        inclusion = Array.wrap inclusion
-
-        if value.is_a? Array
-          return value & inclusion
-        end
-
-        unless value.in? inclusion
-          return nil
-        end
-
-        value
-      end
-
-      def apply_exclusion(value, exclusion)
-        exclusion = Array.wrap exclusion
-
-        if value.is_a? Array
-          return value - exclusion
-        end
-
-        if value.in? exclusion
-          return nil
-        end
-
-        value
-      end
-
       def apply_type(value, type)
 
         if type.present?
@@ -165,21 +137,6 @@ module Rparam
         else
           value
         end
-      end
-
-      def clamp(value, options)
-        min = options[:min]
-        max = options[:max]
-
-        if min.present? and value < min
-          value = min
-        end
-
-        if max.present? and max < value
-          value = max
-        end
-
-        value
       end
 
   end

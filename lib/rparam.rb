@@ -6,6 +6,7 @@ require 'rparam/date_ext'
 require 'rparam/model'
 require 'rparam/parameter'
 require 'rparam/parser'
+require 'rparam/transformer'
 require 'rparam/calculator'
 
 module Rparam
