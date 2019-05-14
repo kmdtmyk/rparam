@@ -10,13 +10,11 @@ RSpec.describe Rparam::Calculator do
     describe 'inclusion' do
 
       example do
-        calculator = Rparam::Calculator.new({ order: 'asc' })
-        calculator.add :order, inclusion: %w(asc desc)
-        expect(calculator.result[:order]).to eq 'asc'
+        expect(Rparam::Transformer).to receive(:inclusion).with(1, 2).and_return(3)
 
-        calculator = Rparam::Calculator.new({ order: 'foo' })
-        calculator.add :order, inclusion: %w(asc desc)
-        expect(calculator.result[:order]).to eq nil
+        calculator = Rparam::Calculator.new({ value: 1 })
+        calculator.add :value, inclusion: 2
+        expect(calculator.result[:value]).to eq 3
       end
 
       example 'with default value' do
@@ -34,17 +32,11 @@ RSpec.describe Rparam::Calculator do
     describe 'exclusion' do
 
       example do
-        calculator = Rparam::Calculator.new({ value: 'a' })
-        calculator.add :value, exclusion: 'a'
-        expect(calculator.result[:value]).to eq nil
+        expect(Rparam::Transformer).to receive(:exclusion).with(1, 2).and_return(3)
 
-        calculator = Rparam::Calculator.new({ value: 'a' })
-        calculator.add :value, exclusion: %w(a b c)
-        expect(calculator.result[:value]).to eq nil
-
-        calculator = Rparam::Calculator.new({ value: 'd' })
-        calculator.add :value, exclusion: %w(a b c)
-        expect(calculator.result[:value]).to eq 'd'
+        calculator = Rparam::Calculator.new({ value: 1 })
+        calculator.add :value, exclusion: 2
+        expect(calculator.result[:value]).to eq 3
       end
 
     end
@@ -70,75 +62,27 @@ RSpec.describe Rparam::Calculator do
       end
 
       example 'min' do
-        calculator = Rparam::Calculator.new({ value: 0 })
-        calculator.add :value, type: Integer, min: 1
-        expect(calculator.result[:value]).to eq 1
+        expect(Rparam::Transformer).to receive(:clamp).with(1, 2, nil).and_return(3)
 
         calculator = Rparam::Calculator.new({ value: 1 })
-        calculator.add :value, type: Integer, min: 1
-        expect(calculator.result[:value]).to eq 1
-
-        calculator = Rparam::Calculator.new
-        calculator.add :value, type: Integer, min: 1
-        expect(calculator.result[:value]).to eq nil
+        calculator.add :value, type: Integer, min: 2
+        expect(calculator.result[:value]).to eq 3
       end
 
       example 'max' do
-        calculator = Rparam::Calculator.new({ value: 10 })
-        calculator.add :value, type: Integer, max: 10
-        expect(calculator.result[:value]).to eq 10
+        expect(Rparam::Transformer).to receive(:clamp).with(1, nil, 2).and_return(3)
 
-        calculator = Rparam::Calculator.new({ value: 11 })
-        calculator.add :value, type: Integer, max: 10
-        expect(calculator.result[:value]).to eq 10
-
-        calculator = Rparam::Calculator.new
-        calculator.add :value, type: Integer, max: 10
-        expect(calculator.result[:value]).to eq nil
+        calculator = Rparam::Calculator.new({ value: 1 })
+        calculator.add :value, type: Integer, max: 2
+        expect(calculator.result[:value]).to eq 3
       end
 
       example 'min and max' do
-        calculator = Rparam::Calculator.new({ value: 0 })
-        calculator.add :value, type: Integer, min: 1, max: 10
-        expect(calculator.result[:value]).to eq 1
+        expect(Rparam::Transformer).to receive(:clamp).with(1, 2, 3).and_return(4)
 
         calculator = Rparam::Calculator.new({ value: 1 })
-        calculator.add :value, type: Integer, min: 1, max: 10
-        expect(calculator.result[:value]).to eq 1
-
-        calculator = Rparam::Calculator.new({ value: 10 })
-        calculator.add :value, type: Integer, min: 1, max: 10
-        expect(calculator.result[:value]).to eq 10
-
-        calculator = Rparam::Calculator.new({ value: 11 })
-        calculator.add :value, type: Integer, min: 1, max: 10
-        expect(calculator.result[:value]).to eq 10
-
-        calculator = Rparam::Calculator.new
-        calculator.add :value, type: Integer, min: 1, max: 10
-        expect(calculator.result[:value]).to eq nil
-      end
-
-      example 'min and max (min > max)' do
-        calculator = Rparam::Calculator.new({ value: 0 })
-        calculator.add :value, type: Integer, min: 10, max: 1
-        expect(calculator.result[:value]).to eq 1
-
-        calculator = Rparam::Calculator.new({ value: 1 })
-        calculator.add :value, type: Integer, min: 10, max: 1
-        expect(calculator.result[:value]).to eq 1
-
-        calculator = Rparam::Calculator.new({ value: 10 })
-        calculator.add :value, type: Integer, min: 10, max: 1
-        expect(calculator.result[:value]).to eq 1
-
-        calculator = Rparam::Calculator.new({ value: 11 })
-        calculator.add :value, type: Integer, min: 10, max: 1
-        expect(calculator.result[:value]).to eq 1
-
-        calculator = Rparam::Calculator.new
-        calculator.add :value, type: Integer, min: 10, max: 1
-        expect(calculator.result[:value]).to eq nil
+        calculator.add :value, type: Integer, min: 2, max: 3
+        expect(calculator.result[:value]).to eq 4
       end
 
     end
