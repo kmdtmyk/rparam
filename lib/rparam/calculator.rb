@@ -26,29 +26,19 @@ module Rparam
         end
       end
 
-      if options[:inclusion].present?
-        inclusion = Array.wrap options[:inclusion]
-        if value.is_a? Array
-          value = value & inclusion
-        else
-          value = nil unless value.in? inclusion
-        end
+      if options.has_key? :inclusion
+        value = apply_inclusion(value, options[:inclusion])
       end
 
       if options.has_key? :exclusion
-        exclusion = Array.wrap options[:exclusion]
-        if value.is_a? Array
-          value = value - exclusion
-        else
-          value = nil if value.in? exclusion
-        end
+        value = apply_exclusion(value, options[:exclusion])
       end
 
-      if options[:default].present? and value.nil?
+      if options.has_key? :default and value.nil?
         value = default_value(options)
       end
 
-      if options[:type].present?
+      if options.has_key? :type
         value = apply_type(value, options[:type])
       end
 
@@ -112,6 +102,34 @@ module Rparam
     end
 
     private
+
+      def apply_inclusion(value, inclusion)
+        inclusion = Array.wrap inclusion
+
+        if value.is_a? Array
+          return value & inclusion
+        end
+
+        unless value.in? inclusion
+          return nil
+        end
+
+        value
+      end
+
+      def apply_exclusion(value, exclusion)
+        exclusion = Array.wrap exclusion
+
+        if value.is_a? Array
+          return value - exclusion
+        end
+
+        if value.in? exclusion
+          return nil
+        end
+
+        value
+      end
 
       def apply_type(value, type)
 
