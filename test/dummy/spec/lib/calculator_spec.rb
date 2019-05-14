@@ -274,6 +274,17 @@ RSpec.describe Rparam::Calculator do
 
     end
 
+    describe 'type: nested parameter' do
+
+      example 'integer' do
+        calculator = Rparam::Calculator.new({ value: { price: '1500' } })
+        calculator.add :value, type: { price: { type: Integer } }
+        expect(calculator.result[:value]).to eq({ price: 1500 })
+      end
+
+    end
+
+
     describe 'save' do
 
       example 'true' do

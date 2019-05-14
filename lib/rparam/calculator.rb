@@ -49,15 +49,11 @@ module Rparam
       end
 
       if options[:type].present?
-        value = Parser.parse(value, options[:type])
+        value = apply_type(value, options[:type])
       end
 
       if options[:type] == Integer and value.present?
         value = clamp(value, options)
-      end
-
-      if value.nil? && options[:type] == Array
-        value = []
       end
 
       @result[name] = value
@@ -116,6 +112,27 @@ module Rparam
     end
 
     private
+
+      def apply_type(value, type)
+
+        if type.present?
+          value = Parser.parse(value, type)
+        end
+
+        if value.nil? && type == Array
+          value = []
+        end
+
+        if type.is_a? Hash
+          calculator = Calculator.new(value)
+          type.each do |name, options|
+            calculator.add name, options
+          end
+          value = calculator.result
+        end
+
+        value
+      end
 
       def default_value(options)
         value = options[:default]
