@@ -9,7 +9,19 @@ RSpec.describe Rparam::Parser do
 
     example do
       expect(parse_date(Date.today)).to eq Date.today
-      expect(parse_date('2018-05-15')).to eq Date.new(2018, 5, 15)
+      expect(parse_date('2018-1-2')).to eq Date.new(2018, 1, 2)
+      expect(parse_date('2018-3-04')).to eq Date.new(2018, 3, 4)
+      expect(parse_date('2018-05-6')).to eq Date.new(2018, 5, 6)
+      expect(parse_date('2018-07-08')).to eq Date.new(2018, 7, 8)
+    end
+
+    example 'month' do
+      expect(parse_date('2018-1')).to eq Date.new(2018, 1, 1)
+      expect(parse_date('2018-02')).to eq Date.new(2018, 2, 1)
+    end
+
+    example 'year' do
+      expect(parse_date('2018')).to eq Date.new(2018, 1, 1)
     end
 
     example 'invalid' do

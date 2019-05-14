@@ -90,29 +90,19 @@ RSpec.describe Rparam::Calculator do
     describe 'type: Date' do
 
       example 'date' do
+        date = Date.new(2018, 5, 15)
+        expect(Rparam::Parser).to receive(:parse_date).with('2018-05-15').and_return(date)
+
         calculator = Rparam::Calculator.new({ value: '2018-05-15' })
         calculator.add :value, type: Date
-        expect(calculator.result[:value]).to eq Date.new(2018, 5, 15)
+        expect(calculator.result[:value]).to eq date
       end
 
-      example 'month' do
-        calculator = Rparam::Calculator.new({ value: '2018-05' })
-        calculator.add :value, type: Date
-        expect(calculator.result[:value]).to eq Date.new(2018, 5, 1)
+      example 'nil' do
+        date = Date.new(2018, 5, 15)
+        expect(Rparam::Parser).to receive(:parse_date).with('2018-05-15').and_return(nil)
 
-        calculator = Rparam::Calculator.new({ value: '2018-5' })
-        calculator.add :value, type: Date
-        expect(calculator.result[:value]).to eq Date.new(2018, 5, 1)
-      end
-
-      example 'year' do
-        calculator = Rparam::Calculator.new({ value: '2018' })
-        calculator.add :value, type: Date
-        expect(calculator.result[:value]).to eq Date.new(2018, 1, 1)
-      end
-
-      example 'invalid date' do
-        calculator = Rparam::Calculator.new({ value: 'invalid' })
+        calculator = Rparam::Calculator.new({ value: '2018-05-15' })
         calculator.add :value, type: Date
         expect(calculator.result[:value]).to eq nil
       end
