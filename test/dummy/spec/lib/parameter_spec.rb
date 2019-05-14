@@ -31,6 +31,22 @@ RSpec.describe Rparam::Parameter do
       expect(subject).to eq({})
     end
 
+    it 'nested parameter' do
+      parameter.param :book do
+        param :price, type: Integer
+        param :release_date, type: Date
+      end
+
+      expect(subject).to eq({
+        book: {
+          type: {
+            price: { type: Integer },
+            release_date: { type: Date },
+          }
+        }
+      })
+    end
+
   end
 
 end

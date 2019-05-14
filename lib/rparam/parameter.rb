@@ -7,10 +7,20 @@ module Rparam
       @config = Hash.new({})
     end
 
-    def param(name, options = nil)
-      if name.nil? or options.nil?
+    def param(name, options = nil, &block)
+      return if name.nil?
+
+      if block_given?
+        child = self.class.new
+        child.instance_exec &block
+        @config[name] = { type: child.to_h }
         return
       end
+
+      if options.nil?
+        return
+      end
+
       @config[name] = @config[name].merge options
     end
 
