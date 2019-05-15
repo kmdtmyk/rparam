@@ -13,6 +13,13 @@ RSpec.describe Rparam::Transformer do
       expect(Rparam::Transformer.inclusion('d', %w(a b c))).to eq  nil
     end
 
+    example 'array' do
+      expect(Rparam::Transformer.inclusion(%w(a b c), 'a')).to eq %w(a)
+      expect(Rparam::Transformer.inclusion(%w(a b c), 'd')).to eq []
+      expect(Rparam::Transformer.inclusion(%w(a b c), %w(a b c))).to eq %w(a b c)
+      expect(Rparam::Transformer.inclusion(%w(a b c), %w(d))).to eq []
+    end
+
   end
 
   describe 'exclusion' do
@@ -22,6 +29,13 @@ RSpec.describe Rparam::Transformer do
       expect(Rparam::Transformer.exclusion('b', 'a')).to eq 'b'
       expect(Rparam::Transformer.exclusion('a', %w(a b c))).to eq nil
       expect(Rparam::Transformer.exclusion('d', %w(a b c))).to eq 'd'
+    end
+
+    example 'array' do
+      expect(Rparam::Transformer.exclusion(%w(a b c), 'a')).to eq %w(b c)
+      expect(Rparam::Transformer.exclusion(%w(a b c), 'd')).to eq %w(a b c)
+      expect(Rparam::Transformer.exclusion(%w(a b c), %w(a b c))).to eq []
+      expect(Rparam::Transformer.exclusion(%w(a b c), %w(d))).to eq %w(a b c)
     end
 
   end
