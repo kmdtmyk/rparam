@@ -240,11 +240,32 @@ RSpec.describe Rparam::Calculator do
         expect(calculator.memory[:order]).to eq 'asc'
       end
 
+      example 'type Date' do
+        calculator = Rparam::Calculator.new({ value: '2019-05-15' })
+        calculator.add :value, save: true, type: Date
+        expect(calculator.result[:value]).to eq Date.new(2019, 5, 15)
+        expect(calculator.memory[:value]).to eq '2019-05-15'
+      end
+
+      example 'nested parameter' do
+        calculator = Rparam::Calculator.new({ item: { value: '1' } })
+        calculator.add :item, type: { value: { save: true, type: Integer } }
+        expect(calculator.result[:item]).to eq({ value: 1 })
+        expect(calculator.memory[:item]).to eq({ value: '1' })
+      end
+
       example 'with memory' do
         calculator = Rparam::Calculator.new({}, { order: 'asc' })
         calculator.add :order, save: true
         expect(calculator.result[:order]).to eq 'asc'
         expect(calculator.memory[:order]).to eq 'asc'
+      end
+
+      example 'nested parameter with memory' do
+        calculator = Rparam::Calculator.new({}, { item: { value: '1' } })
+        calculator.add :item, type: { value: { save: true, type: Integer } }
+        expect(calculator.result[:item]).to eq({ value: 1 })
+        expect(calculator.memory[:item]).to eq({ value: '1' })
       end
 
       example 'ignore invalid memory' do

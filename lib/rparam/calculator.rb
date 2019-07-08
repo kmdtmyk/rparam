@@ -39,7 +39,7 @@ module Rparam
       end
 
       if options.has_key? :type
-        value = apply_type(value, options[:type])
+        value = apply_type(name, value, options[:type])
       end
 
       if options.has_key? :min or options.has_key? :max
@@ -103,7 +103,7 @@ module Rparam
 
     private
 
-      def apply_type(value, type)
+      def apply_type(name, value, type)
 
         if type.present?
           value = Parser.parse(value, type)
@@ -114,11 +114,15 @@ module Rparam
         end
 
         if type.is_a? Hash
-          calculator = Calculator.new(value)
+          calculator = Calculator.new(value, @memory[name])
           type.each do |name, options|
             calculator.add name, options
           end
           value = calculator.result
+          if @memory[name].nil?
+            @memory[name] = {}
+          end
+          @memory[name].merge! calculator.memory
         end
 
         value
