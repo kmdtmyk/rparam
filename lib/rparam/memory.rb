@@ -12,33 +12,16 @@ module Rparam
     end
 
     def read(name, type = nil)
-      value = @memory[name]
-      if type == :relative_date and @memory.has_key? name
-        difference = Parser.parse_int(value)
-        if difference.nil?
-          return ''
-        end
-        date = Time.zone.today + difference
-        date.strftime '%Y-%m-%d'
-      elsif type == :relative_month and @memory.has_key? name
-        difference = Parser.parse_int(value)
-        if difference.nil?
-          return ''
-        end
-        date = Time.zone.today.next_month difference
-        date.strftime '%Y-%m'
-      elsif type == :relative_year and @memory.has_key? name
-        difference = Parser.parse_int(value)
-        if difference.nil?
-          return ''
-        end
-        date = Time.zone.today.next_year difference
-        date.strftime '%Y'
+      return unless @memory.has_key? name
+      if type == :relative_date
+        read_relative_date(name)
+      elsif type == :relative_month
+        read_relative_month(name)
+      elsif type == :relative_year
+        read_relative_year(name)
       else
-        value
+        @memory[name]
       end
-    rescue
-      nil
     end
 
     def write(name, value, type = nil)
@@ -55,5 +38,39 @@ module Rparam
       @memory[name] = value
     end
 
+    private
+
+      def read_relative_date(name)
+        value = @memory[name]
+        difference = Parser.parse_int(value)
+        if difference.nil?
+          ''
+        else
+          date = Time.zone.today + difference
+          date.strftime '%Y-%m-%d'
+        end
+      end
+
+      def read_relative_month(name)
+        value = @memory[name]
+        difference = Parser.parse_int(value)
+        if difference.nil?
+          ''
+        else
+          date = Time.zone.today.next_month difference
+          date.strftime '%Y-%m'
+        end
+      end
+
+      def read_relative_year(name)
+        value = @memory[name]
+        difference = Parser.parse_int(value)
+        if difference.nil?
+          ''
+        else
+          date = Time.zone.today.next_year difference
+          date.strftime '%Y'
+        end
+      end
   end
 end
