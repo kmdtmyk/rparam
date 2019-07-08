@@ -20,6 +20,11 @@ RSpec.describe Rparam::Memory do
         expect(memory.read :value, :relative_date).to eq '2018-10-20'
       end
 
+      example 'invalid value' do
+        memory = Rparam::Memory.new({ value: 'invalid' })
+        expect(memory.read :value, :relative_date).to eq ''
+      end
+
       example 'nil' do
         memory = Rparam::Memory.new({ value: nil })
         expect(memory.read :value, :relative_date).to eq ''
@@ -35,6 +40,11 @@ RSpec.describe Rparam::Memory do
         expect(memory.read :value, :relative_month).to eq '2018-12'
       end
 
+      example 'invalid value' do
+        memory = Rparam::Memory.new({ value: 'invalid' })
+        expect(memory.read :value, :relative_month).to eq ''
+      end
+
       example 'nil' do
         memory = Rparam::Memory.new({ value: nil })
         expect(memory.read :value, :relative_month).to eq ''
@@ -48,6 +58,11 @@ RSpec.describe Rparam::Memory do
         travel_to Date.new(2018, 10, 15)
         memory = Rparam::Memory.new({ value: 2 })
         expect(memory.read :value, :relative_year).to eq '2020'
+      end
+
+      example 'invalid value' do
+        memory = Rparam::Memory.new({ value: 'invalid' })
+        expect(memory.read :value, :relative_year).to eq ''
       end
 
       example 'nil' do
