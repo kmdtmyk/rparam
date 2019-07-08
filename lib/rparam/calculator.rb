@@ -22,7 +22,7 @@ module Rparam
         if value.nil?
           value = @memory.read(name, options[:save])
         else
-          @memory.write(name, options[:save], value)
+          @memory.write(name, value, options[:save])
         end
       end
 

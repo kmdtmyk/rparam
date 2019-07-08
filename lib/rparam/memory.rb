@@ -11,7 +11,7 @@ module Rparam
       @memory = memory
     end
 
-    def read(name, type)
+    def read(name, type = nil)
       value = @memory[name]
       if type == :relative_date and @memory.has_key? name
         difference = Parser.parse_int(value)
@@ -41,7 +41,7 @@ module Rparam
       nil
     end
 
-    def write(name, type, value)
+    def write(name, value, type = nil)
       if type == :relative_date
         date = Parser.parse_date(value)
         value = date&.difference_in_day
