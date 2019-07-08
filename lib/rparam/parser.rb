@@ -50,6 +50,9 @@ module Rparam
     end
 
     def parse_int(value)
+      if value.is_a? String
+        value = value.tr('０-９', '0-9')
+      end
       Integer(value)
     rescue
       nil

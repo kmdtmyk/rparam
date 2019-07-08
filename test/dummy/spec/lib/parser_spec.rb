@@ -69,8 +69,12 @@ RSpec.describe Rparam::Parser do
   describe 'parse_int' do
 
     example do
-      expect(parse_int(1)).to eq 1
-      expect(parse_int('1')).to eq 1
+      expect(parse_int(1234567890)).to eq 1234567890
+      expect(parse_int('1234567890')).to eq 1234567890
+    end
+
+    example 'full-width character' do
+      expect(parse_int('１２３４５６７８９０')).to eq 1234567890
     end
 
     example 'invalid' do
