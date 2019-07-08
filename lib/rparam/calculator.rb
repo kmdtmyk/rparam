@@ -6,7 +6,7 @@ module Rparam
 
     def initialize(params = nil, memory = nil)
       @params = params || {}
-      @memory = {}
+      @memory = Memory.new
       @result = {}
       begin
         @memory.merge! memory
@@ -20,9 +20,9 @@ module Rparam
 
       if options[:save].present?
         if value.nil?
-          value = read_memory(name, options)
+          value = @memory.read(name, options[:save])
         else
-          write_memory(name, value, options)
+          @memory.write(name, options[:save], value)
         end
       end
 
@@ -49,56 +49,12 @@ module Rparam
       @result[name] = value
     end
 
-    def write_memory(name, value, options)
-      if options[:save] == :relative_date
-        date = Parser.parse_date(value)
-        value = date&.difference_in_day
-      elsif options[:save] == :relative_month
-        date = Parser.parse_date(value)
-        value = date&.difference_in_month
-      elsif options[:save] == :relative_year
-        date = Parser.parse_date(value)
-        value = date&.difference_in_year
-      end
-      @memory[name] = value
-    end
-
-    def read_memory(name, options)
-      value = @memory[name]
-      if options[:save] == :relative_date and @memory.has_key? name
-        difference = Parser.parse_int(value)
-        if difference.nil?
-          return ''
-        end
-        date = Time.zone.today + difference
-        date.strftime '%Y-%m-%d'
-      elsif options[:save] == :relative_month and @memory.has_key? name
-        difference = Parser.parse_int(value)
-        if difference.nil?
-          return ''
-        end
-        date = Time.zone.today.next_month difference
-        date.strftime '%Y-%m'
-      elsif options[:save] == :relative_year and @memory.has_key? name
-        difference = Parser.parse_int(value)
-        if difference.nil?
-          return ''
-        end
-        date = Time.zone.today.next_year difference
-        date.strftime '%Y'
-      else
-        value
-      end
-    rescue
-      nil
-    end
-
     def result
       @result.dup
     end
 
     def memory
-      @memory.dup
+      @memory.to_h
     end
 
     private
