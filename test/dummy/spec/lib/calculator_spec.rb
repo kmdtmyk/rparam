@@ -230,7 +230,6 @@ RSpec.describe Rparam::Calculator do
 
     end
 
-
     describe 'save' do
 
       example 'true' do
@@ -287,26 +286,22 @@ RSpec.describe Rparam::Calculator do
 
       describe 'relative date' do
 
-        example do
-          travel_to Date.new(2018, 10, 15)
-          calculator = Rparam::Calculator.new({ value: '2018-10-20' })
+        example 'memory receive write' do
+          calculator = Rparam::Calculator.new({ value: '2018-10-20'  })
+          memory = calculator.instance_variable_get(:@memory)
+          expect(memory).to_not receive(:read).with(:value, :relative_date)
+          expect(memory).to receive(:write).with(:value, '2018-10-20', :relative_date)
           calculator.add :value, save: :relative_date
           expect(calculator.result[:value]).to eq '2018-10-20'
-          expect(calculator.memory[:value]).to eq 5
         end
 
-        example 'blank' do
-          calculator = Rparam::Calculator.new({ value: '' })
-          calculator.add :value, save: :relative_date
-          expect(calculator.result[:value]).to eq ''
-          expect(calculator.memory[:value]).to eq nil
-        end
-
-        example 'without params' do
+        example 'memory receive read' do
           calculator = Rparam::Calculator.new
+          memory = calculator.instance_variable_get(:@memory)
+          expect(memory).to receive(:read).with(:value, :relative_date).and_return('foo')
+          expect(memory).to_not receive(:write).with(:value, nil, :relative_date)
           calculator.add :value, save: :relative_date
-          expect(calculator.result[:value]).to eq nil
-          expect(calculator.memory.has_key? :value).to eq false
+          expect(calculator.result[:value]).to eq 'foo'
         end
 
         example 'with default value' do
@@ -323,70 +318,26 @@ RSpec.describe Rparam::Calculator do
           expect(calculator.result[:value]).to eq today
         end
 
-        describe 'with memory' do
-
-          example 'valid value' do
-            travel_to Date.new(2018, 10, 15)
-            calculator = Rparam::Calculator.new({}, { value: 5 })
-            calculator.add :value, save: :relative_date
-            expect(calculator.result[:value]).to eq '2018-10-20'
-            expect(calculator.memory[:value]).to eq 5
-          end
-
-          example 'valid value with default' do
-            travel_to Date.new(2018, 10, 15)
-            calculator = Rparam::Calculator.new({}, { value: 5 })
-            calculator.add :value, save: :relative_date, default: Date.today
-            expect(calculator.result[:value]).to eq '2018-10-20'
-            expect(calculator.memory[:value]).to eq 5
-          end
-
-          example 'invalid value' do
-            calculator = Rparam::Calculator.new({}, { value: 'invalid' })
-            calculator.add :value, save: :relative_date
-            expect(calculator.result[:value]).to eq ''
-
-            calculator = Rparam::Calculator.new({}, { value: '' })
-            calculator.add :value, save: :relative_date
-            expect(calculator.result[:value]).to eq ''
-
-            calculator = Rparam::Calculator.new({}, { value: nil })
-            calculator.add :value, save: :relative_date
-            expect(calculator.result[:value]).to eq ''
-          end
-
-          example 'invalid value with default' do
-            calculator = Rparam::Calculator.new({}, { value: nil })
-            calculator.add :value, save: :relative_date, default: Date.today
-            expect(calculator.result[:value]).to eq ''
-          end
-
-        end
-
       end
 
       describe 'relative month' do
 
-        example do
-          travel_to Date.new(2018, 10, 15)
-          calculator = Rparam::Calculator.new({ value: '2018-11' })
+        example 'memory receive write' do
+          calculator = Rparam::Calculator.new({ value: '2018-10'  })
+          memory = calculator.instance_variable_get(:@memory)
+          expect(memory).to_not receive(:read).with(:value, :relative_month)
+          expect(memory).to receive(:write).with(:value, '2018-10', :relative_month)
           calculator.add :value, save: :relative_month
-          expect(calculator.result[:value]).to eq '2018-11'
-          expect(calculator.memory[:value]).to eq 1
+          expect(calculator.result[:value]).to eq '2018-10'
         end
 
-        example 'blank' do
-          calculator = Rparam::Calculator.new({ value: '' })
-          calculator.add :value, save: :relative_month
-          expect(calculator.result[:value]).to eq ''
-          expect(calculator.memory[:value]).to eq nil
-        end
-
-        example 'without params' do
+        example 'memory receive read' do
           calculator = Rparam::Calculator.new
+          memory = calculator.instance_variable_get(:@memory)
+          expect(memory).to receive(:read).with(:value, :relative_month).and_return('foo')
+          expect(memory).to_not receive(:write).with(:value, nil, :relative_month)
           calculator.add :value, save: :relative_month
-          expect(calculator.result[:value]).to eq nil
-          expect(calculator.memory.has_key? :value).to eq false
+          expect(calculator.result[:value]).to eq 'foo'
         end
 
         example 'with default value' do
@@ -403,70 +354,26 @@ RSpec.describe Rparam::Calculator do
           expect(calculator.result[:value]).to eq Date.new(2018, 10, 1)
         end
 
-        describe 'with memory' do
-
-          example 'valid value' do
-            travel_to Date.new(2018, 10, 15)
-            calculator = Rparam::Calculator.new({}, { value: 2 })
-            calculator.add :value, save: :relative_month
-            expect(calculator.result[:value]).to eq '2018-12'
-            expect(calculator.memory[:value]).to eq 2
-          end
-
-          example 'valid value with default' do
-            travel_to Date.new(2018, 10, 15)
-            calculator = Rparam::Calculator.new({}, { value: 2 })
-            calculator.add :value, save: :relative_month, default: Date.today
-            expect(calculator.result[:value]).to eq '2018-12'
-            expect(calculator.memory[:value]).to eq 2
-          end
-
-          example 'invalid value' do
-            calculator = Rparam::Calculator.new({}, { value: 'invalid' })
-            calculator.add :value, save: :relative_month
-            expect(calculator.result[:value]).to eq ''
-
-            calculator = Rparam::Calculator.new({}, { value: '' })
-            calculator.add :value, save: :relative_month
-            expect(calculator.result[:value]).to eq ''
-
-            calculator = Rparam::Calculator.new({}, { value: nil })
-            calculator.add :value, save: :relative_month
-            expect(calculator.result[:value]).to eq ''
-          end
-
-          example 'invalid value with default' do
-            calculator = Rparam::Calculator.new({}, { value: nil })
-            calculator.add :value, save: :relative_month, default: Date.today
-            expect(calculator.result[:value]).to eq ''
-          end
-
-        end
-
       end
 
       describe 'relative year' do
 
-        example do
-          travel_to Date.new(2018, 10, 15)
-          calculator = Rparam::Calculator.new({ value: '2018' })
+        example 'memory receive write' do
+          calculator = Rparam::Calculator.new({ value: '2018'  })
+          memory = calculator.instance_variable_get(:@memory)
+          expect(memory).to_not receive(:read).with(:value, :relative_year)
+          expect(memory).to receive(:write).with(:value, '2018', :relative_year)
           calculator.add :value, save: :relative_year
           expect(calculator.result[:value]).to eq '2018'
-          expect(calculator.memory[:value]).to eq 0
         end
 
-        example 'blank' do
-          calculator = Rparam::Calculator.new({ value: '' })
-          calculator.add :value, save: :relative_year
-          expect(calculator.result[:value]).to eq ''
-          expect(calculator.memory[:value]).to eq nil
-        end
-
-        example 'without params' do
+        example 'memory receive read' do
           calculator = Rparam::Calculator.new
+          memory = calculator.instance_variable_get(:@memory)
+          expect(memory).to receive(:read).with(:value, :relative_year).and_return('foo')
+          expect(memory).to_not receive(:write).with(:value, nil, :relative_year)
           calculator.add :value, save: :relative_year
-          expect(calculator.result[:value]).to eq nil
-          expect(calculator.memory.has_key? :value).to eq false
+          expect(calculator.result[:value]).to eq 'foo'
         end
 
         example 'with default value' do
@@ -488,46 +395,6 @@ RSpec.describe Rparam::Calculator do
           calculator = Rparam::Calculator.new
           calculator.add :value, type: Date, save: :relative_year, default: Date.today
           expect(calculator.result[:value]).to eq Date.new(2018, 1, 1)
-        end
-
-        describe 'with memory' do
-
-          example 'valid value' do
-            travel_to Date.new(2018, 10, 15)
-            calculator = Rparam::Calculator.new({}, { value: 0 })
-            calculator.add :value, save: :relative_year
-            expect(calculator.result[:value]).to eq '2018'
-            expect(calculator.memory[:value]).to eq 0
-          end
-
-          example 'valid value with default' do
-            travel_to Date.new(2018, 10, 15)
-            calculator = Rparam::Calculator.new({}, { value: 1 })
-            calculator.add :value, save: :relative_year, default: Date.today
-            expect(calculator.result[:value]).to eq '2019'
-            expect(calculator.memory[:value]).to eq 1
-          end
-
-          example 'invalid value' do
-            calculator = Rparam::Calculator.new({}, { value: 'invalid' })
-            calculator.add :value, save: :relative_year
-            expect(calculator.result[:value]).to eq ''
-
-            calculator = Rparam::Calculator.new({}, { value: '' })
-            calculator.add :value, save: :relative_year
-            expect(calculator.result[:value]).to eq ''
-
-            calculator = Rparam::Calculator.new({}, { value: nil })
-            calculator.add :value, save: :relative_year
-            expect(calculator.result[:value]).to eq ''
-          end
-
-          example 'invalid value with default' do
-            calculator = Rparam::Calculator.new({}, { value: nil })
-            calculator.add :value, save: :relative_year, default: Date.today
-            expect(calculator.result[:value]).to eq ''
-          end
-
         end
 
       end
