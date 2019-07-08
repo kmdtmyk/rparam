@@ -211,9 +211,21 @@ RSpec.describe Rparam::Calculator do
     describe 'type: nested parameter' do
 
       example 'integer' do
-        calculator = Rparam::Calculator.new({ value: { price: '1500' } })
-        calculator.add :value, type: { price: { type: Integer } }
-        expect(calculator.result[:value]).to eq({ price: 1500 })
+        calculator = Rparam::Calculator.new({ item: { value: '1500' } })
+        calculator.add :item, type: { value: { type: Integer } }
+        expect(calculator.result[:item]).to eq({ value: 1500 })
+      end
+
+      example 'date' do
+        calculator = Rparam::Calculator.new({ item: { value: '2019-05-15' } })
+        calculator.add :item, type: { value: { type: Date } }
+        expect(calculator.result[:item]).to eq({ value: Date.new(2019, 5, 15) })
+      end
+
+      example 'multiple parameter' do
+        calculator = Rparam::Calculator.new({ item: { value1: '1500', value2: '2019-05-15' } })
+        calculator.add :item, type: { value1: { type: Integer }, value2: { type: Date } }
+        expect(calculator.result[:item]).to eq({ value1: 1500, value2: Date.new(2019, 5, 15) })
       end
 
     end
