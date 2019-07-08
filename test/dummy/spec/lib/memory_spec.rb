@@ -12,22 +12,49 @@ RSpec.describe Rparam::Memory do
       expect(memory.read :value).to eq 'foo'
     end
 
-    example 'relative date' do
-      travel_to Date.new(2018, 10, 15)
-      memory = Rparam::Memory.new({ value: 5 })
-      expect(memory.read :value, :relative_date).to eq '2018-10-20'
+    context 'relative date' do
+
+      example do
+        travel_to Date.new(2018, 10, 15)
+        memory = Rparam::Memory.new({ value: 5 })
+        expect(memory.read :value, :relative_date).to eq '2018-10-20'
+      end
+
+      example 'nil' do
+        memory = Rparam::Memory.new({ value: nil })
+        expect(memory.read :value, :relative_date).to eq ''
+      end
+
     end
 
-    example 'relative month' do
-      travel_to Date.new(2018, 10, 15)
-      memory = Rparam::Memory.new({ value: 2 })
-      expect(memory.read :value, :relative_month).to eq '2018-12'
+    context 'relative month' do
+
+      example do
+        travel_to Date.new(2018, 10, 15)
+        memory = Rparam::Memory.new({ value: 2 })
+        expect(memory.read :value, :relative_month).to eq '2018-12'
+      end
+
+      example 'nil' do
+        memory = Rparam::Memory.new({ value: nil })
+        expect(memory.read :value, :relative_month).to eq ''
+      end
+
     end
 
-    example 'relative year' do
-      travel_to Date.new(2018, 10, 15)
-      memory = Rparam::Memory.new({ value: 2 })
-      expect(memory.read :value, :relative_year).to eq '2020'
+    context 'relative year' do
+
+      example do
+        travel_to Date.new(2018, 10, 15)
+        memory = Rparam::Memory.new({ value: 2 })
+        expect(memory.read :value, :relative_year).to eq '2020'
+      end
+
+      example 'nil' do
+        memory = Rparam::Memory.new({ value: nil })
+        expect(memory.read :value, :relative_year).to eq ''
+      end
+
     end
 
     example 'empty' do
@@ -54,22 +81,55 @@ RSpec.describe Rparam::Memory do
       expect(memory[:value]).to eq 'foo'
     end
 
-    example 'relative date' do
-      travel_to Date.new(2018, 10, 15)
-      memory.write :value, '2018-10-20', :relative_date
-      expect(memory[:value]).to eq 5
+    context 'relative date' do
+
+      let(:type){ :relative_date }
+
+      example do
+        travel_to Date.new(2018, 10, 15)
+        memory.write :value, '2018-10-20', type
+        expect(memory[:value]).to eq 5
+      end
+
+      example 'nil' do
+        memory.write :value, nil, type
+        expect(memory.to_h).to eq({value: nil})
+      end
+
     end
 
-    example 'relative month' do
-      travel_to Date.new(2018, 10, 15)
-      memory.write :value, '2018-11', :relative_month
-      expect(memory[:value]).to eq 1
+    context 'relative month' do
+
+      let(:type){ :relative_month }
+
+      example do
+        travel_to Date.new(2018, 10, 15)
+        memory.write :value, '2018-11', type
+        expect(memory[:value]).to eq 1
+      end
+
+      example 'nil' do
+        memory.write :value, nil, type
+        expect(memory.to_h).to eq({value: nil})
+      end
+
     end
 
-    example 'relative year' do
-      travel_to Date.new(2018, 10, 15)
-      memory.write :value, '2018', :relative_year
-      expect(memory[:value]).to eq 0
+    context 'relative year' do
+
+      let(:type){ :relative_year }
+
+      example do
+        travel_to Date.new(2018, 10, 15)
+        memory.write :value, '2018', type
+        expect(memory[:value]).to eq 0
+      end
+
+      example 'nil' do
+        memory.write :value, nil, type
+        expect(memory.to_h).to eq({value: nil})
+      end
+
     end
 
     example 'invalid value' do
