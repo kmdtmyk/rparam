@@ -2,30 +2,49 @@
 
 ## Usage
 
+app/parameters/sample_parameter.rb
+
 ```ruby
-class AccessLogsController < ApplicationController
+class SampleParameter < Rparam::Parameter
+
+  def index
+    param :date, type: Date
+    param :per_page, type: Integer, min: 1, max: 100
+    param :order, inclusion: %w(asc desc), default: 'asc'
+  end
+
+end
+```
+
+app/controllers/sample_controller.rb
+
+```ruby
+class SampleController < ApplicationController
   before_action :apply_rparam
-
-  def index
-    @access_logs = AccessLog.where(date: params[:date])
-      .where(level: params[:level])
-      .order(created_at: params[:order])
-  end
-
 end
 ```
 
 ```ruby
-class AccessLogsParameter < Rparam::Parameter
-
-  def index
-    param :date, type: Date, default: Time.zone.today
-    param :level, type: Array ,save: true, default: %w(debug info error)
-    param :order, save: true,  inclusion: %w(asc desc), default: 'desc'
-  end
-
-end
+# GET /sample?date=2019-05-15&per_page=1000&order=foo
+params[:date]
+# => Wed, 15 May 2019
+params[:per_page]
+# => 100
+params[:order]
+# => "asc"
 ```
+
+### Option
+
+|name|description|example|
+|-|-|-|
+|type|Declar parameter type.|Integer, Array, Date|
+|inclusion|Accept only specified value.|%w(asc desc)|
+|exclusion|Reject specified value.|%w(foo bar)|
+|min|Set minimum value.|0|
+|max|Set maximum value.|100|
+|default|Set default value if parameter is nil.|10, Time.zone.today|
+|save|Save parameter and restore it if parameter is nil.|true, :relative_date, :relative_month, :relative_year|
 
 ## Installation
 
