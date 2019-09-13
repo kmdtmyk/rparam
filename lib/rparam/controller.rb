@@ -33,15 +33,15 @@ module Rparam
       def rparam_memory
         user = current_rparam_user
         if user.nil?
-          return JSON.parse(cookies.signed[full_action_name], symbolize_names: true)
+          return JSON.parse(cookies.signed[rparam_key], symbolize_names: true)
         end
 
         begin
           rparam_memory = user.rparam_memories.find_by(
-            action: full_action_name,
+            action: rparam_key,
           )
         rescue NoMethodError
-          return JSON.parse(cookies.signed[full_action_name], symbolize_names: true)
+          return JSON.parse(cookies.signed[rparam_key], symbolize_names: true)
         end
 
         JSON.parse(rparam_memory.value, symbolize_names: true)
@@ -55,7 +55,7 @@ module Rparam
         if user.present?
           begin
             rparam_memory = user.rparam_memories.find_or_create_by(
-              action: full_action_name,
+              action: rparam_key,
             )
             rparam_memory.update(value: memory.to_json)
             return
@@ -64,7 +64,7 @@ module Rparam
           end
         end
 
-        cookies.permanent.signed[full_action_name] = {
+        cookies.permanent.signed[rparam_key] = {
           value: memory.to_json,
           httponly: true,
         }
@@ -74,7 +74,7 @@ module Rparam
         current_user if defined? current_user
       end
 
-      def full_action_name
+      def rparam_key
         parent_name = self.class.parent_name
         if parent_name.nil?
           "#{controller_name}##{action_name}"
