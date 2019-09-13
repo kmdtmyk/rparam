@@ -85,7 +85,13 @@ module Rparam
       end
 
       def default_value(options)
-        value = options[:default]
+        default = options[:default]
+        value = if default.is_a? Proc
+          default.call
+        else
+          default
+        end
+
         if options[:save] == :relative_date
           value.to_s
         elsif options[:save] == :relative_month

@@ -27,6 +27,12 @@ RSpec.describe Rparam::Calculator do
         expect(calculator.result[:order]).to eq 'asc'
       end
 
+      example 'with default value (lambda)' do
+        calculator = Rparam::Calculator.new
+        calculator.add :value, default: -> { 1 }
+        expect(calculator.result[:value]).to eq 1
+      end
+
     end
 
     describe 'exclusion' do
