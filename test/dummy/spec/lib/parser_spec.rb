@@ -85,4 +85,23 @@ RSpec.describe Rparam::Parser do
 
   end
 
+  describe 'parse_json' do
+
+    example do
+      expect(parse_json('{"foo":123}')).to eq({ foo: 123 })
+      expect(parse_json('{"foo":"abc"}')).to eq({ foo: 'abc' })
+    end
+
+    example 'syntax error' do
+      expect(parse_json('{"foo":123')).to eq nil
+    end
+
+    example 'invalid' do
+      expect(parse_json('')).to eq nil
+      expect(parse_json(nil)).to eq nil
+      expect(parse_json('invalid')).to eq nil
+    end
+
+  end
+
 end

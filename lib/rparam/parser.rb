@@ -58,5 +58,11 @@ module Rparam
       nil
     end
 
+    def parse_json(value)
+      JSON.parse(value, symbolize_names: true)
+    rescue
+      nil
+    end
+
   end
 end
