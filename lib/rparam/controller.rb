@@ -33,7 +33,7 @@ module Rparam
       def rparam_memory
         user = current_rparam_user
         if user.nil?
-          return JSON.parse(cookies.signed[rparam_key], symbolize_names: true)
+          return rparam_cookie
         end
 
         begin
@@ -41,10 +41,10 @@ module Rparam
             action: rparam_key,
           )
         rescue NoMethodError
-          return JSON.parse(cookies.signed[rparam_key], symbolize_names: true)
+          return rparam_cookie
         end
 
-        JSON.parse(rparam_memory.value, symbolize_names: true)
+        Parser.parse_json(rparam_memory.value)
       rescue
         nil
       end
@@ -52,22 +52,20 @@ module Rparam
       def save_rparam_memory(memory)
         user = current_rparam_user
 
-        if user.present?
-          begin
-            rparam_memory = user.rparam_memories.find_or_create_by(
-              action: rparam_key,
-            )
-            rparam_memory.update(value: memory.to_json)
-            return
-          rescue NoMethodError
-            # use cookie
-          end
+        if user.nil?
+          self.rparam_cookie = memory
+          return
         end
 
-        cookies.permanent.signed[rparam_key] = {
-          value: memory.to_json,
-          httponly: true,
-        }
+        begin
+          rparam_memory = user.rparam_memories.find_or_create_by(
+            action: rparam_key,
+          )
+          rparam_memory.update(value: memory.to_json)
+        rescue NoMethodError
+          self.rparam_cookie = memory
+        end
+
       end
 
       def current_rparam_user
@@ -81,6 +79,18 @@ module Rparam
         else
           "#{parent_name.gsub('::', '/').downcase}/#{controller_name}##{action_name}"
         end
+      end
+
+      def rparam_cookie
+        cookie = cookies.signed[rparam_key] || cookies[rparam_key]
+        Parser.parse_json(cookie)
+      end
+
+      def rparam_cookie=(value)
+        cookies.permanent.signed[rparam_key] = {
+          value: value.to_json,
+          httponly: true,
+        }
       end
 
     end

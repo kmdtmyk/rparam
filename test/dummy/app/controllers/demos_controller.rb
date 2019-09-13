@@ -4,7 +4,7 @@ class DemosController < ApplicationController
   before_action :apply_rparam
 
   def show
-    @cookie = cookies.signed[rparam_key]
+    @cookie = rparam_cookie
   end
 
 end
