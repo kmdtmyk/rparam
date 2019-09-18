@@ -73,7 +73,12 @@ module Rparam
       end
 
       def rparam_key
-        parent_name = self.class.parent_name
+        if self.class.respond_to? :module_parent_name
+          parent_name = self.class.module_parent_name
+        else
+          parent_name = self.class.parent_name
+        end
+
         if parent_name.nil?
           "#{controller_name}##{action_name}"
         else
