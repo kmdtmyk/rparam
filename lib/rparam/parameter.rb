@@ -12,7 +12,7 @@ module Rparam
 
       if block_given?
         child = self.class.new
-        child.instance_exec &block
+        child.instance_exec(&block)
         @config[name] = { type: child.to_h }
         return
       end
