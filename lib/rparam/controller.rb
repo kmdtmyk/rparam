@@ -82,7 +82,7 @@ module Rparam
         if parent_name.nil?
           "#{controller_name}##{action_name}"
         else
-          "#{parent_name.gsub('::', '/').downcase}/#{controller_name}##{action_name}"
+          "#{parent_name.gsub('::', '/').underscore}/#{controller_name}##{action_name}"
         end
       end
 

@@ -85,3 +85,15 @@ RSpec.describe Foo::Bar::TestsController, type: :controller do
   end
 
 end
+
+
+RSpec.describe HogeHoge::TestsController, type: :controller do
+
+  describe 'rparam_key' do
+    it do
+      get :index
+      expect(@controller.rparam_key).to eq 'hoge_hoge/tests#index'
+    end
+  end
+
+end
