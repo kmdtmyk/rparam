@@ -74,9 +74,7 @@ end
 ## Test
 
 ```
-docker-compose run --rm app bash
-cd test/dummy
-rspec
+docker-compose run app rspec
 ```
 
 ## License
