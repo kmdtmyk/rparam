@@ -74,7 +74,8 @@ end
 ## Test
 
 ```
-docker-compose run app rspec
+BUNDLE_GEMFILE=gemfiles/6.0.gemfile bundle exec rspec
+BUNDLE_GEMFILE=gemfiles/5.2.gemfile bundle exec rspec
 ```
 
 ## License
