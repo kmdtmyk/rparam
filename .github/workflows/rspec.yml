@@ -3,10 +3,10 @@ name: RSpec
 on: [push]
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         rails-version: ['6.0', '5.2']
