@@ -1,4 +1,4 @@
-![RSpec](https://github.com/kmdtmyk/rparam/workflows/RSpec/badge.svg)
+[![RSpec](https://github.com/kmdtmyk/rparam/workflows/RSpec/badge.svg)](https://github.com/kmdtmyk/rparam/actions)
 
 # Rparam
 
