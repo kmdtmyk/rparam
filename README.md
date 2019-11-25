@@ -1,3 +1,5 @@
+![RSpec](https://github.com/kmdtmyk/rparam/workflows/RSpec/badge.svg)
+
 # Rparam
 
 ## Usage
