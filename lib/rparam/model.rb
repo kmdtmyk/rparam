@@ -9,7 +9,7 @@ module Rparam
 
     class_methods do
       def acts_as_rparam_user
-        has_many :rparam_memories, as: :user
+        has_many :rparam_memories, as: :user, dependent: :destroy
       end
     end
 
