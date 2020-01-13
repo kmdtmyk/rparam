@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class DemosController < ApplicationController
+class DemoController < ApplicationController
   before_action :apply_rparam
 
-  def show
+  def index
     @cookie = rparam_cookie
   end
 
