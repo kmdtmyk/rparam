@@ -76,6 +76,7 @@ module Rparam
         if self.class.respond_to? :module_parent_name
           parent_name = self.class.module_parent_name
         else
+          # deprecated in rails 6.0
           parent_name = self.class.parent_name
         end
 
