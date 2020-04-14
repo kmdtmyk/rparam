@@ -66,6 +66,27 @@ RSpec.describe Rparam::Parser do
 
   end
 
+  describe 'parse_boolean' do
+
+    example 'true' do
+      expect(parse_boolean(true)).to eq true
+      expect(parse_boolean('true')).to eq true
+      expect(parse_boolean('1')).to eq true
+    end
+
+    example 'false' do
+      expect(parse_boolean(false)).to eq false
+      expect(parse_boolean('false')).to eq false
+      expect(parse_boolean('0')).to eq false
+    end
+
+    example 'invalid' do
+      expect(parse_boolean('')).to eq nil
+      expect(parse_boolean(nil)).to eq nil
+    end
+
+  end
+
   describe 'parse_int' do
 
     example do

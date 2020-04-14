@@ -58,6 +58,19 @@ module Rparam
       nil
     end
 
+    def parse_boolean(value)
+      value = value.to_s
+      if %w(true 1).include? value
+        true
+      elsif %w(false 0).include? value
+        false
+      else
+        nil
+      end
+    rescue
+      nil
+    end
+
     def parse_json(value)
       JSON.parse(value, symbolize_names: true)
     rescue
