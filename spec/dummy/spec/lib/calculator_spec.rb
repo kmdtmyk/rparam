@@ -93,6 +93,22 @@ RSpec.describe Rparam::Calculator do
 
     end
 
+    describe 'type: Boolean' do
+
+      example do
+        calculator = Rparam::Calculator.new({ value: '1' })
+        calculator.add :value, type: :boolean
+        expect(calculator.result[:value]).to eq true
+      end
+
+      example 'default value' do
+        calculator = Rparam::Calculator.new
+        calculator.add :value, type: :boolean, default: false
+        expect(calculator.result[:value]).to eq false
+      end
+
+    end
+
     describe 'type: Date' do
 
       example 'date' do
@@ -250,6 +266,13 @@ RSpec.describe Rparam::Calculator do
         calculator.add :value, save: true, type: Date
         expect(calculator.result[:value]).to eq Date.new(2019, 5, 15)
         expect(calculator.memory[:value]).to eq '2019-05-15'
+      end
+
+      example 'type Boolean' do
+        calculator = Rparam::Calculator.new({ value: '1' })
+        calculator.add :value, save: true, type: :boolean
+        expect(calculator.result[:value]).to eq true
+        expect(calculator.memory[:value]).to eq '1'
       end
 
       example 'nested parameter' do

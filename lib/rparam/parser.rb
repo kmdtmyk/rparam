@@ -9,6 +9,8 @@ module Rparam
         parse_date(value)
       elsif type == Integer
         parse_int(value)
+      elsif type == :boolean
+        parse_boolean(value)
       elsif type == Array
         parse_array(value)
       else
