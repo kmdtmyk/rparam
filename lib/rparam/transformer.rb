@@ -35,11 +35,11 @@ module Rparam
     def clamp(value, min, max)
       return if value.nil?
 
-      if min.present? and value < min
+      if min.present? && value < min
         value = min
       end
 
-      if max.present? and max < value
+      if max.present? && max < value
         value = max
       end
 

@@ -26,23 +26,23 @@ module Rparam
         end
       end
 
-      if options.has_key? :inclusion
+      if options.has_key?(:inclusion)
         value = Transformer.inclusion(value, options[:inclusion])
       end
 
-      if options.has_key? :exclusion
+      if options.has_key?(:exclusion)
         value = Transformer.exclusion(value, options[:exclusion])
       end
 
-      if options.has_key? :default and value.nil?
+      if options.has_key?(:default) && value.nil?
         value = default_value(options)
       end
 
-      if options.has_key? :type
+      if options.has_key?(:type)
         value = apply_type(name, value, options[:type])
       end
 
-      if options.has_key? :min or options.has_key? :max
+      if options.has_key?(:min) || options.has_key?(:max)
         value = Transformer.clamp(value, options[:min], options[:max])
       end
 
