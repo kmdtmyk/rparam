@@ -39,7 +39,8 @@ RSpec.describe Rparam::Parameter do
 
       expect(subject).to eq({
         book: {
-          type: {
+          type: Hash,
+          schema: {
             price: { type: Integer },
             release_date: { type: Date },
           }

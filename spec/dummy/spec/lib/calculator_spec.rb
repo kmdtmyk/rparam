@@ -234,19 +234,19 @@ RSpec.describe Rparam::Calculator do
 
       example 'integer' do
         calculator = Rparam::Calculator.new({ item: { value: '1500' } })
-        calculator.add :item, type: { value: { type: Integer } }
+        calculator.add :item, schema: { value: { type: Integer } }
         expect(calculator.result[:item]).to eq({ value: 1500 })
       end
 
       example 'date' do
         calculator = Rparam::Calculator.new({ item: { value: '2019-05-15' } })
-        calculator.add :item, type: { value: { type: Date } }
+        calculator.add :item, schema: { value: { type: Date } }
         expect(calculator.result[:item]).to eq({ value: Date.new(2019, 5, 15) })
       end
 
       example 'multiple parameter' do
         calculator = Rparam::Calculator.new({ item: { value1: '1500', value2: '2019-05-15' } })
-        calculator.add :item, type: { value1: { type: Integer }, value2: { type: Date } }
+        calculator.add :item, schema: { value1: { type: Integer }, value2: { type: Date } }
         expect(calculator.result[:item]).to eq({ value1: 1500, value2: Date.new(2019, 5, 15) })
       end
 
@@ -277,7 +277,7 @@ RSpec.describe Rparam::Calculator do
 
       example 'nested parameter' do
         calculator = Rparam::Calculator.new({ item: { value: '1' } })
-        calculator.add :item, type: { value: { save: true, type: Integer } }
+        calculator.add :item, schema: { value: { save: true, type: Integer } }
         expect(calculator.result[:item]).to eq({ value: 1 })
         expect(calculator.memory[:item]).to eq({ value: '1' })
       end
@@ -291,7 +291,7 @@ RSpec.describe Rparam::Calculator do
 
       example 'nested parameter with memory' do
         calculator = Rparam::Calculator.new({}, { item: { value: '1' } })
-        calculator.add :item, type: { value: { save: true, type: Integer } }
+        calculator.add :item, schema: { value: { save: true, type: Integer } }
         expect(calculator.result[:item]).to eq({ value: 1 })
         expect(calculator.memory[:item]).to eq({ value: '1' })
       end
