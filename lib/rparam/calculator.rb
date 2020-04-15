@@ -78,10 +78,6 @@ module Rparam
           end
         end
 
-        if value.nil? && type == Array
-          value = []
-        end
-
         if type == Hash
           calculator = Calculator.new(value, @memory[name])
           options[:schema].each do |name, options|
