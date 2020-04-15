@@ -67,7 +67,15 @@ module Rparam
         type = options[:type]
 
         if type.present?
-          value = Parser.parse(value, type)
+          # type: { class: Integer, default: 0 }
+          if type.is_a? Hash
+            value = Parser.parse(value, type[:class])
+            if value.nil?
+              value = type[:default]
+            end
+          else
+            value = Parser.parse(value, type)
+          end
         end
 
         if value.nil? && type == Array

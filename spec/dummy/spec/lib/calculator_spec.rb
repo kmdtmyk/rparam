@@ -101,10 +101,24 @@ RSpec.describe Rparam::Calculator do
         expect(calculator.result[:value]).to eq true
       end
 
+      example 'default type value' do
+        calculator = Rparam::Calculator.new
+        calculator.add :value, type: { class: :boolean, default: false }
+        expect(calculator.result[:value]).to eq false
+
+        calculator = Rparam::Calculator.new({ value: '' })
+        calculator.add :value, type: { class: :boolean, default: false }
+        expect(calculator.result[:value]).to eq false
+      end
+
       example 'default value' do
         calculator = Rparam::Calculator.new
         calculator.add :value, type: :boolean, default: false
         expect(calculator.result[:value]).to eq false
+
+        calculator = Rparam::Calculator.new({ value: '' })
+        calculator.add :value, type: :boolean, default: false
+        expect(calculator.result[:value]).to eq nil
       end
 
     end
