@@ -3,7 +3,8 @@
 module Rparam
   class Parameter
 
-    def initialize
+    def initialize(controller = nil)
+      @controller = controller
       @config = Hash.new({})
     end
 

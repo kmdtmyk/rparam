@@ -8,7 +8,7 @@ module Rparam
 
       def rparam_parameter
         class_name = self.class.name[0..-11] + 'Parameter'
-        class_name.constantize.new
+        class_name.constantize.new(self)
       rescue
         nil
       end
