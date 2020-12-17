@@ -40,7 +40,7 @@ params[:order]
 
 |name|description|example|
 |-|-|-|
-|type|Declar parameter type.|Integer, Array, Date, :boolean|
+|type|Declare parameter type.|Integer, Array, Date, :boolean|
 |inclusion|Accept only specified value.|%w(asc desc)|
 |exclusion|Reject specified value.|%w(foo bar)|
 |min|Set minimum value.|0|
