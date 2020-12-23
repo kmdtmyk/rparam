@@ -76,6 +76,7 @@ end
 ## Test
 
 ```
+BUNDLE_GEMFILE=gemfiles/6.1.gemfile bundle exec rspec
 BUNDLE_GEMFILE=gemfiles/6.0.gemfile bundle exec rspec
 BUNDLE_GEMFILE=gemfiles/5.2.gemfile bundle exec rspec
 ```
