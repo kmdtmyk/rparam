@@ -157,10 +157,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rails (= 6.1.5)
   rparam!
   rspec-rails (~> 5.1, >= 5.1.1)
   sqlite3
 
 BUNDLED WITH
-   1.17.3
+   2.1.4
