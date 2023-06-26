@@ -13,11 +13,12 @@ jobs:
         ruby-version: [3.0.x, 2.7.x, 2.6.x]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Set up Ruby ${{ matrix.ruby-version }}
-      uses: actions/setup-ruby@v1
+      uses: actions/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf # v1.146.0
       with:
         ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true
     - name: Install dependencies
       run: sudo apt-get install libsqlite3-dev
     - name: Build and test
