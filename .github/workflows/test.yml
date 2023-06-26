@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         rails-version: ['6.1', '6.0', '5.2']
-        ruby-version: [3.0.x, 2.7.x, 2.6.x, 2.5.x]
+        ruby-version: [3.0.x, 2.7.x, 2.6.x]
 
     steps:
     - uses: actions/checkout@v1
