@@ -7,8 +7,8 @@ require "rparam/version"
 Gem::Specification.new do |spec|
   spec.name        = "rparam"
   spec.version     = Rparam::VERSION
-  spec.authors     = ["kmdtmyk"]
-  spec.email       = ["winback_banderas@yahoo.co.jp"]
+  spec.authors     = [""]
+  spec.email       = [""]
   spec.homepage    = "https://github.com/kmdtmyk/rparam"
   spec.summary     = "Summary of Rparam."
   spec.description = "Description of Rparam."
